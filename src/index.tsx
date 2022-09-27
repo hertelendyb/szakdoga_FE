@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 
-import { Home, Login, SignUp } from "./components";
+import { Header, Home, Login, SignUp } from "./components";
 
 import "./index.css";
 
@@ -27,6 +27,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    {window.localStorage.getItem("auth") === "true" ? <Header /> : null}
     <RouterProvider router={router} />
   </React.StrictMode>
 );

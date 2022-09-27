@@ -1,9 +1,10 @@
 import { Box, TextField, Button } from "@mui/material";
 import axios from "axios";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { Dropzone } from "../Dropzone/Dropzone";
 
 const validationSchema = yup.object({
   email: yup
@@ -15,6 +16,7 @@ const validationSchema = yup.object({
 });
 
 export const SignUp = () => {
+  const [image, setImage] = useState("");
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -32,9 +34,11 @@ export const SignUp = () => {
             email: values.email,
             password: values.password,
             name: values.username,
+            profilePicture: image,
           },
         });
         navigate("/home");
+        window.localStorage.setItem("auth", "true");
       } catch (e: any) {
         alert(e.message);
       }
@@ -92,6 +96,7 @@ export const SignUp = () => {
             error={formik.touched.username && Boolean(formik.errors.username)}
             helperText={formik.touched.username && formik.errors.username}
           />
+          <Dropzone image={image} setImage={setImage} />
           <Button variant="outlined" type="submit">
             Sign up
           </Button>
