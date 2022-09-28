@@ -1,16 +1,17 @@
-import { Box, Button, TextField } from "@mui/material";
-import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { Box, Button, TextField } from "@mui/material";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     try {
-      axios({
+      await axios({
         method: "post",
         url: "api/users/login",
         data: {

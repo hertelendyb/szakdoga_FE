@@ -3,13 +3,13 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 
-import { Home, Login, SignUp } from "./components";
+import { Home, Layout, Login, SignUp } from "./components";
 
 import "./index.css";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <Login />,
   },
   {
@@ -17,8 +17,14 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: "/home",
-    element: <Home />,
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/home",
+        element: <Home />,
+      },
+    ],
   },
 ]);
 
