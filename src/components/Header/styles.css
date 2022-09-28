@@ -1,4 +1,7 @@
 .header {
   position: sticky;
   background-color: darkcyan;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }

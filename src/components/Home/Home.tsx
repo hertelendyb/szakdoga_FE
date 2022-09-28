@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -49,9 +49,6 @@ export const Home = () => {
           <li key={project.id || 1}>{project.name}</li>
         ))}
       </ul>
-      <Button onClick={async () => axios.get("api/users/logout")}>
-        Logout
-      </Button>
     </Box>
   );
 };

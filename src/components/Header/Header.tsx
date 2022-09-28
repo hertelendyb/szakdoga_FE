@@ -1,7 +1,8 @@
-import { Button } from "@mui/material";
-import axios from "axios";
 import React from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import { Button } from "@mui/material";
 
 import "./styles.css";
 
@@ -10,13 +11,12 @@ export const Header = () => {
 
   const handleLogout = async () => {
     await axios.get("api/users/logout");
-    window.localStorage.setItem("auth", "false");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
     <div className="header">
-      <Button variant="contained" onClick={handleLogout}>
+      <Button sx={{ m: 2 }} variant="contained" onClick={handleLogout}>
         Logout
       </Button>
     </div>

@@ -20,7 +20,6 @@ export const Login = () => {
         },
       });
       navigate("/home");
-      window.localStorage.setItem("auth", "true");
     } catch (e: any) {
       alert(e.message);
     }
