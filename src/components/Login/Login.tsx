@@ -3,15 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { Box, Button, TextField } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/slices/userSlice";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     try {
-      await axios({
+      const res = await axios({
         method: "post",
         url: "api/users/login",
         data: {
@@ -20,6 +23,7 @@ export const Login = () => {
         },
       });
       navigate("/home");
+      dispatch(setUser({ user: res.data }));
     } catch (e: any) {
       alert(e.message);
     }

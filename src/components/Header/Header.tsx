@@ -5,12 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 import "./styles.css";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../../store/slices/userSlice";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     await axios.get("api/users/logout");
+    dispatch(clearUser());
     navigate("/login");
   };
 
