@@ -7,7 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import { layoutLoader } from "./components/Layout/Layout";
 import { loginLoader } from "./components/Login/Login";
-import { Home, Layout, Login, SignUp } from "./components";
+import { Home, Layout, Login, Organization, SignUp } from "./components";
 
 import "./index.css";
 
@@ -29,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <Home />,
+      },
+      {
+        path: "/organization/:id",
+        element: <Organization />,
       },
     ],
   },

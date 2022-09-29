@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../store/hooks";
 
 export const loginLoader = async () => {
   try {
-    const res = await axios.get("api/users/me");
+    const res = await axios.get("/api/users/me");
     if (res.status === 200) {
       return redirect("/home");
     }
@@ -27,7 +27,7 @@ export const Login = () => {
     try {
       const res = await axios({
         method: "post",
-        url: "api/users/login",
+        url: "/api/users/login",
         data: {
           email,
           password,

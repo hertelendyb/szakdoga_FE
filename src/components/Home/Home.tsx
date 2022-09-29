@@ -1,6 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { CreateDialog } from "../CreateDialog/CreateDialog";
+import { ProjectCard } from "../ProjectCard/ProjectCard";
 
 interface Organizations {
   id: number | null;
@@ -20,13 +23,14 @@ export const Home = () => {
       name: "No project found",
     },
   ]);
+  const [open, setOpen] = useState(false);
 
   const getOrgsAndProjects = async () => {
-    const orgResponse: any = await axios.get("api/organizations");
+    const orgResponse: any = await axios.get("/api/organizations");
     if (orgResponse.data instanceof Array) {
       setOrganizations(orgResponse.data);
     }
-    const projectResponse: any = await axios.get("api/users/myProjects");
+    const projectResponse: any = await axios.get("/api/users/myProjects");
     if (projectResponse.data instanceof Array) {
       setProjects(projectResponse.data);
     }
@@ -34,21 +38,39 @@ export const Home = () => {
 
   useEffect(() => {
     getOrgsAndProjects();
-    axios.get("api/users/me");
+    axios.get("/api/users/me");
   }, []);
+
+  const openDialog = () => {
+    setOpen(true);
+  };
 
   return (
     <Box>
-      <ul title="orgs">
+      <Typography sx={{ mb: 3 }}>Organizations</Typography>
+      <Grid container spacing={5}>
         {organizations.map((organization) => (
-          <li key={organization.id || 1}>{organization.name}</li>
+          <Grid key={organization.id} item xs={3}>
+            <Link to={`/organization/${organization.id}`}>
+              <ProjectCard name={organization.name} />
+            </Link>
+          </Grid>
         ))}
-      </ul>
-      <ul title="projects">
+        <Grid item xs={3}>
+          <Button variant="contained" onClick={openDialog}>
+            Create new organization
+          </Button>
+        </Grid>
+      </Grid>
+      <Typography sx={{ my: 3 }}>Projects</Typography>
+      <Grid container spacing={5}>
         {projects.map((project) => (
-          <li key={project.id || 1}>{project.name}</li>
+          <Grid key={project.id} item xs={3}>
+            <ProjectCard name={project.name} />
+          </Grid>
         ))}
-      </ul>
+      </Grid>
+      <CreateDialog open={open} setOpen={setOpen} />
     </Box>
   );
 };
