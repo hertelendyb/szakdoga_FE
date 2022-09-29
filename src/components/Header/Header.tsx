@@ -14,7 +14,7 @@ export const Header = () => {
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    await axios.get("api/users/logout");
+    await axios.get("/api/users/logout");
     dispatch(clearUser());
     navigate("/login");
   };

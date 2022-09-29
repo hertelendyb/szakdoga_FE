@@ -34,7 +34,7 @@ export const SignUp = () => {
       try {
         const res = await axios({
           method: "post",
-          url: "api/users/signup",
+          url: "/api/users/signup",
           data: {
             email: values.email,
             password: values.password,
