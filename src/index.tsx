@@ -1,18 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 
+import { store } from "./store/store";
+import { layoutLoader } from "./components/Layout/Layout";
+import { loginLoader } from "./components/Login/Login";
 import { Home, Layout, Login, SignUp } from "./components";
 
 import "./index.css";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    loader: loginLoader,
   },
   {
     path: "/signup",
@@ -21,6 +24,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    loader: layoutLoader,
     children: [
       {
         path: "/home",

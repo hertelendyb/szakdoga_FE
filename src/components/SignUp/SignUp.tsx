@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 import { setUser } from "../../store/slices/userSlice";
 import { Dropzone } from "../Dropzone/Dropzone";
+import { useAppDispatch } from "../../store/hooks";
 
 import { Box, TextField, Button } from "@mui/material";
 
@@ -22,7 +22,7 @@ const validationSchema = yup.object({
 export const SignUp = () => {
   const [image, setImage] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
       email: "",

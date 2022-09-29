@@ -1,16 +1,27 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { Box, Button, TextField } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
+import { useAppDispatch } from "../../store/hooks";
+
+export const loginLoader = async () => {
+  try {
+    const res = await axios.get("api/users/me");
+    if (res.status === 200) {
+      return redirect("/home");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleLogin = async () => {
     try {
