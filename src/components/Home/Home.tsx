@@ -5,22 +5,17 @@ import { Link } from "react-router-dom";
 import { CreateDialog } from "../CreateDialog/CreateDialog";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
 
-interface Organizations {
-  id: number | null;
-  name: string;
-}
-
 export const Home = () => {
-  const [organizations, setOrganizations] = useState<[Organizations]>([
+  const [organizations, setOrganizations] = useState([
     {
       id: null,
-      name: "No organization found",
+      name: "",
     },
   ]);
-  const [projects, setProjects] = useState<[Organizations]>([
+  const [projects, setProjects] = useState([
     {
       id: null,
-      name: "No project found",
+      name: "",
     },
   ]);
   const [open, setOpen] = useState(false);
@@ -48,28 +43,34 @@ export const Home = () => {
   return (
     <Box>
       <Typography sx={{ mb: 3 }}>Organizations</Typography>
-      <Grid container spacing={5}>
-        {organizations.map((organization) => (
-          <Grid key={organization.id} item xs={3}>
-            <Link to={`/organization/${organization.id}`}>
-              <ProjectCard name={organization.name} />
-            </Link>
-          </Grid>
-        ))}
-        <Grid item xs={3}>
-          <Button variant="contained" onClick={openDialog}>
-            Create new organization
-          </Button>
+      {!organizations[0].id ? (
+        <Typography>No projects found</Typography>
+      ) : (
+        <Grid container spacing={5}>
+          {organizations.map((organization) => (
+            <Grid key={organization.id} item xs={3}>
+              <Link to={`/organization/${organization.id}`}>
+                <ProjectCard name={organization.name} />
+              </Link>
+            </Grid>
+          ))}
         </Grid>
-      </Grid>
+      )}
       <Typography sx={{ my: 3 }}>Projects</Typography>
-      <Grid container spacing={5}>
-        {projects.map((project) => (
-          <Grid key={project.id} item xs={3}>
-            <ProjectCard name={project.name} />
-          </Grid>
-        ))}
-      </Grid>
+      {!projects[0].id ? (
+        <Typography>No projects found</Typography>
+      ) : (
+        <Grid container spacing={5}>
+          {projects.map((project) => (
+            <Grid key={project.id} item xs={3}>
+              <ProjectCard name={project.name} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+      <Button sx={{ mt: 3 }} variant="contained" onClick={openDialog}>
+        Create new organization
+      </Button>
       <CreateDialog open={open} setOpen={setOpen} />
     </Box>
   );
