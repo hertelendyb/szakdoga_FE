@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
@@ -7,7 +8,14 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import { layoutLoader } from "./components/Layout/Layout";
 import { loginLoader } from "./components/Login/Login";
-import { Home, Layout, Login, Organization, SignUp } from "./components";
+import {
+  Home,
+  Layout,
+  Login,
+  Organization,
+  Project,
+  SignUp,
+} from "./components";
 
 import "./index.css";
 
@@ -33,6 +41,20 @@ const router = createBrowserRouter([
       {
         path: "/organization/:id",
         element: <Organization />,
+        loader: async ({ params }) => {
+          const res = await axios.get(`/api/organizations/${params.id}`);
+          return res.data.name;
+        },
+      },
+      {
+        path: "/organization/:id/project/:projectId",
+        element: <Project />,
+        loader: async ({ params }) => {
+          const res = await axios.get(
+            `/api/organizations/${params.id}/projects/${params.projectId}`
+          );
+          return res.data.name;
+        },
       },
     ],
   },

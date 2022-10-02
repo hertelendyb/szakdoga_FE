@@ -4,3 +4,4 @@ export { Home } from "./Home/Home";
 export { Header } from "./Header/Header";
 export { Layout } from "./Layout/Layout";
 export { Organization } from "./Organization/Organization";
+export { Project } from "./Project/Project";
