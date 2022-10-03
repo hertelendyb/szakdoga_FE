@@ -50,10 +50,11 @@ const router = createBrowserRouter([
         path: "/organization/:id/project/:projectId",
         element: <Project />,
         loader: async ({ params }) => {
-          const res = await axios.get(
+          const org = await axios.get(`/api/organizations/${params.id}`);
+          const project = await axios.get(
             `/api/organizations/${params.id}/projects/${params.projectId}`
           );
-          return res.data.name;
+          return [org.data.name, project.data.name];
         },
       },
     ],

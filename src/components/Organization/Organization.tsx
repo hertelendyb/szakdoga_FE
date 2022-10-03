@@ -6,7 +6,14 @@ import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog"
 import { CreateDialog } from "../CreateDialog/CreateDialog";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
 
-import { Box, Button, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Breadcrumbs,
+  Button,
+  Grid,
+  Typography,
+  Link as MUILink,
+} from "@mui/material";
 
 export const Organization = () => {
   const { id } = useParams();
@@ -15,18 +22,18 @@ export const Organization = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const orgName = useLoaderData();
 
-  const getOrganization = async () => {
-    try {
-      const res = await axios.get(`/api/organizations/${id}`);
-      setProjects(res.data.projects);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const getOrganization = async () => {
+      try {
+        const res = await axios.get(`/api/organizations/${id}`);
+        setProjects(res.data.projects);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getOrganization();
-  }, []);
+  }, [id]);
 
   const openCreateDialog = () => {
     setCreateOpen(true);
@@ -38,6 +45,12 @@ export const Organization = () => {
 
   return (
     <Box>
+      <Breadcrumbs aria-label="breadcrumb">
+        <MUILink underline="hover" color="inherit" href="/home">
+          Home
+        </MUILink>
+        <Typography color="text.primary">{orgName as string}</Typography>
+      </Breadcrumbs>
       <Typography variant="h5">{orgName as string}</Typography>
       <Typography sx={{ my: 3 }}>Projects</Typography>
       {projects.length === 0 ? (
