@@ -15,6 +15,7 @@ import {
   Organization,
   Project,
   SignUp,
+  Task,
 } from "./components";
 
 import "./index.css";
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
           );
           return [org.data.name, project.data.name];
         },
+      },
+      {
+        path: "/organization/:id/project/:projectId/task/:taskId",
+        element: <Task />,
       },
     ],
   },

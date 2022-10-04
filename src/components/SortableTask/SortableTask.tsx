@@ -1,7 +1,8 @@
 import React from "react";
-
+import { Link, useParams } from "react-router-dom";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+
 import {
   Card,
   CardActions,
@@ -19,13 +20,15 @@ type SortableTaskProps = {
 };
 
 export const SortableTask = ({
-  id,
+  id: taskId,
   name,
   isDone,
   handleCheck,
 }: SortableTaskProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: id });
+    useSortable({ id: taskId });
+
+  const { id, projectId } = useParams();
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -49,7 +52,9 @@ export const SortableTask = ({
         </IconButton>
       </CardActions>
       <CardContent sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-        {name}
+        <Link to={`/organization/${id}/project/${projectId}/task/${taskId}`}>
+          {name}
+        </Link>
       </CardContent>
       <CardActions>
         <Checkbox checked={isDone} onChange={handleCheck} />
