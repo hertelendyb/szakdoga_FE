@@ -16,6 +16,10 @@ export const Home = () => {
     {
       id: null,
       name: "",
+      organization: {
+        id: null,
+        name: "",
+      },
     },
   ]);
   const [open, setOpen] = useState(false);
@@ -63,7 +67,11 @@ export const Home = () => {
         <Grid container spacing={5}>
           {projects.map((project) => (
             <Grid key={project.id} item xs={3}>
-              <ProjectCard name={project.name} />
+              <Link
+                to={`/organization/${project.organization.id}/project/${project.id}`}
+              >
+                <ProjectCard name={project.name} />
+              </Link>
             </Grid>
           ))}
         </Grid>

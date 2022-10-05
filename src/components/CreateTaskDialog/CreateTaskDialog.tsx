@@ -8,14 +8,16 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
   Button,
   Select,
   MenuItem,
   SelectChangeEvent,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 type CreateTaskDialogProps = {
   open: boolean;
@@ -37,7 +39,7 @@ type Contributor = {
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Description is required"),
-  deadline: yup.string().nullable(),
+  deadline: yup.date().nullable(),
   assigneeId: yup.number(),
 });
 
@@ -102,7 +104,9 @@ export const CreateTaskDialog = ({
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create new task</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
-        <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
+        <DialogContent
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
           <TextField
             variant="standard"
             label="Name"
@@ -118,6 +122,7 @@ export const CreateTaskDialog = ({
             label="Description"
             id="description"
             name="description"
+            multiline
             value={formik.values.description}
             onChange={formik.handleChange}
             error={
@@ -125,28 +130,35 @@ export const CreateTaskDialog = ({
             }
             helperText={formik.touched.description && formik.errors.description}
           />
-          <TextField
-            variant="standard"
+          <DatePicker
             label="Deadline"
-            id="deadline"
-            name="deadline"
+            inputFormat="yyyy-MM-dd"
             value={formik.values.deadline}
-            onChange={formik.handleChange}
-            error={formik.touched.deadline && Boolean(formik.errors.deadline)}
-            helperText={formik.touched.deadline && formik.errors.deadline}
+            onChange={(newValue) => {
+              formik.setFieldValue("deadline", newValue);
+            }}
+            renderInput={(params) => <TextField {...params} />}
           />
-          <Select
-            id="assigneeId"
-            value={formik.values.assigneeId as unknown as string}
-            label="Assignee"
-            onChange={handleSelectAssignee}
-          >
-            {contributors.map((user) => (
-              <MenuItem key={user.userId} value={user.userId}>
-                {user.user.name}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl>
+            <InputLabel id="assignee-label">Assignee</InputLabel>
+            <Select
+              labelId="assignee-label"
+              id="assigneeId"
+              value={
+                formik.values.assigneeId
+                  ? (formik.values.assigneeId as unknown as string)
+                  : ""
+              }
+              label="Assignee"
+              onChange={handleSelectAssignee}
+            >
+              {contributors.map((user) => (
+                <MenuItem key={user.userId} value={user.userId}>
+                  {user.user.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
