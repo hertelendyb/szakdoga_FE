@@ -47,8 +47,7 @@ export const Login = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "100vw",
-        height: "100vh",
+        height: "100%",
       }}
     >
       <Box
@@ -57,7 +56,7 @@ export const Login = () => {
           flexDirection: "column",
           backgroundColor: "white",
           width: "25%",
-          height: "25%",
+          height: "min-content",
           borderRadius: 3,
           p: 3,
           gap: 2,

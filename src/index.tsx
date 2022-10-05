@@ -4,6 +4,8 @@ import axios from "axios";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 import { store } from "./store/store";
 import { layoutLoader } from "./components/Layout/Layout";
@@ -15,6 +17,7 @@ import {
   Organization,
   Project,
   SignUp,
+  Task,
 } from "./components";
 
 import "./index.css";
@@ -50,12 +53,15 @@ const router = createBrowserRouter([
         path: "/organization/:id/project/:projectId",
         element: <Project />,
         loader: async ({ params }) => {
-          const org = await axios.get(`/api/organizations/${params.id}`);
           const project = await axios.get(
             `/api/organizations/${params.id}/projects/${params.projectId}`
           );
-          return [org.data.name, project.data.name];
+          return [project.data.organization.name, project.data.name];
         },
+      },
+      {
+        path: "/organization/:id/project/:projectId/task/:taskId",
+        element: <Task />,
       },
     ],
   },
@@ -67,7 +73,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <RouterProvider router={router} />
+      </LocalizationProvider>
     </Provider>
   </React.StrictMode>
 );

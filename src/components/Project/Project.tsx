@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import sortBy from "lodash/sortBy";
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { DndContext } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -14,13 +14,12 @@ import {
 } from "@dnd-kit/modifiers";
 
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
-import { CreateDialog } from "../CreateDialog/CreateDialog";
 import { SortableTask } from "../SortableTask/SortableTask";
+import { CreateTaskDialog } from "../CreateTaskDialog/CreateTaskDialog";
 
 import {
   Box,
   Typography,
-  Grid,
   Button,
   Breadcrumbs,
   Link as MUILink,
@@ -144,11 +143,10 @@ export const Project = () => {
           Delete project
         </Button>
       </Box>
-      <CreateDialog
+      <CreateTaskDialog
         open={createOpen}
         setOpen={setCreateOpen}
-        isForProject
-        orgId={id}
+        length={tasks.length}
       />
       <ConfirmDeleteDialog
         open={deleteOpen}
