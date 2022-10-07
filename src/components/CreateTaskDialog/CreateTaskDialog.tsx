@@ -50,7 +50,7 @@ export const CreateTaskDialog = ({
 }: CreateTaskDialogProps) => {
   const [contributors, setContributors] = useState<Contributor[]>([]);
   const navigate = useNavigate();
-  const { id, projectId } = useParams();
+  const { id, projectId, taskId } = useParams();
 
   const formik = useFormik({
     initialValues: {
@@ -64,7 +64,9 @@ export const CreateTaskDialog = ({
       try {
         await axios({
           method: "post",
-          url: `/api/organizations/${id}/projects/${projectId}/tasks`,
+          url: `/api/organizations/${id}/projects/${projectId}/tasks${
+            taskId ? `/${taskId}` : ""
+          }`,
           data: {
             name: values.name,
             description: values.description,

@@ -24,19 +24,37 @@ import {
   Breadcrumbs,
   Link as MUILink,
 } from "@mui/material";
+import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
 
-interface Task {
+export interface Task {
   id: number;
   name: string;
+  description: string;
   order: number;
   done: boolean;
+  deadline: string;
+  assignee: {
+    name: string;
+  };
+  childTasks: Task[];
 }
 
 export const Project = () => {
   const [orgName, projectName]: any = useLoaderData();
   const { id, projectId } = useParams();
+  const [addOpen, setAddOpen] = useState(false);
+  const [isPO, setIsPO] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([
-    { id: 0, name: "", order: 0, done: false },
+    {
+      id: 0,
+      name: "",
+      description: "",
+      order: 0,
+      done: false,
+      deadline: "",
+      assignee: { name: "" },
+      childTasks: [],
+    },
   ]);
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -105,6 +123,16 @@ export const Project = () => {
     }
   };
 
+  const openAddContributorDialog = () => {
+    setIsPO(false);
+    setAddOpen(true);
+  };
+
+  const openAddProjectOwnerDialog = () => {
+    setIsPO(true);
+    setAddOpen(true);
+  };
+
   return (
     <Box>
       <Breadcrumbs aria-label="breadcrumb">
@@ -129,6 +157,7 @@ export const Project = () => {
                 id={task.id}
                 name={task.name}
                 isDone={task.done}
+                task={task}
                 handleCheck={() => handleCheck(task.id, task.done)}
               />
             ))}
@@ -142,6 +171,20 @@ export const Project = () => {
         <Button variant="contained" color="error" onClick={openDeleteDialog}>
           Delete project
         </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={openAddContributorDialog}
+        >
+          Add contributor to this project
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={openAddProjectOwnerDialog}
+        >
+          Add PO to this project
+        </Button>
       </Box>
       <CreateTaskDialog
         open={createOpen}
@@ -152,6 +195,15 @@ export const Project = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         orgId={id}
+        projectId={projectId}
+        deleteProject
+      />
+      <AddUserDialog
+        open={addOpen}
+        setOpen={setAddOpen}
+        orgId={id}
+        projectId={projectId}
+        addPO={isPO}
       />
     </Box>
   );

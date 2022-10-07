@@ -14,17 +14,21 @@ import {
 type ConfirmDeleteDialogProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
-  isForProject?: boolean;
+  deleteProject?: boolean;
+  deleteTask?: boolean;
   orgId?: string;
-  projectId?: number | null;
+  projectId?: string;
+  taskId?: string;
 };
 
 export const ConfirmDeleteDialog = ({
   open,
   setOpen,
-  isForProject = false,
+  deleteProject = false,
+  deleteTask = false,
   orgId,
   projectId,
+  taskId,
 }: ConfirmDeleteDialogProps) => {
   const navigate = useNavigate();
 
@@ -32,34 +36,33 @@ export const ConfirmDeleteDialog = ({
     setOpen(false);
   };
 
-  const handleDeleteOrg = async () => {
-    await axios.delete(`/api/organizations/${orgId}`);
-    setOpen(false);
-    navigate("/home");
-  };
-
-  const handleDeleteProject = async () => {
-    await axios.delete(`/api/organizations/${orgId}/projects/${projectId}`);
-    setOpen(false);
-    navigate("/home");
+  const handleDelete = async () => {
+    if (deleteProject) {
+      await axios.delete(`/api/organizations/${orgId}/projects/${projectId}`);
+      setOpen(false);
+      navigate(`/organization/${orgId}`);
+    } else if (deleteTask) {
+      await axios.delete(
+        `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}`
+      );
+      setOpen(false);
+      navigate(`/organization/${orgId}/project/${projectId}`);
+    } else {
+      await axios.delete(`/api/organizations/${orgId}`);
+      setOpen(false);
+      navigate("/home");
+    }
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>
-        Delete {isForProject ? "project" : "organization"}
-      </DialogTitle>
+      <DialogTitle>Delete</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Are you sure you want to delete this{" "}
-          {isForProject ? "project" : "organization"}?
-        </DialogContentText>
+        <DialogContentText>Are you sure?</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={!isForProject ? handleDeleteOrg : handleDeleteProject}>
-          Delete
-        </Button>
+        <Button onClick={handleDelete}>Delete</Button>
       </DialogActions>
     </Dialog>
   );
