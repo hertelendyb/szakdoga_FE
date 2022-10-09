@@ -2,12 +2,10 @@ import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { clearUser } from "../../store/slices/userSlice";
-import { useAppDispatch } from "../../store/hooks";
+import { clearUser, selectUser } from "../../store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-import { Button } from "@mui/material";
-
-import "./styles.css";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -19,11 +17,29 @@ export const Header = () => {
     navigate("/login");
   };
 
+  const { user } = useAppSelector(selectUser);
+
   return (
-    <div className="header">
+    <Box
+      sx={{
+        position: "sticky",
+        top: 0,
+        zIndex: 999,
+        backgroundColor: "darkcyan",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        alignItems: "center",
+      }}
+    >
+      <Avatar
+        alt={user.name}
+        src={user.profilePicture ? user.profilePicture : undefined}
+      />
+      <Typography sx={{ ml: 2 }}>{user.name}</Typography>
       <Button sx={{ m: 2 }} variant="contained" onClick={handleLogout}>
         Logout
       </Button>
-    </div>
+    </Box>
   );
 };

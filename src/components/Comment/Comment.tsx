@@ -12,12 +12,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 
+interface CommentProps extends TaskComment {
+  getTask: () => void;
+}
+
 export const Comment = ({
   id: commentId,
   text,
   createdAt,
   author,
-}: TaskComment) => {
+  getTask,
+}: CommentProps) => {
   const parsedTime = parseJSON(createdAt);
   const formattedTime = format(parsedTime, "yyyy-MM-dd HH:mm:ss");
   const [open, setOpen] = useState(false);
@@ -102,6 +107,7 @@ export const Comment = ({
         setOpen={setEditOpen}
         oldComment={text}
         commentId={commentId}
+        getTask={getTask}
       />
     </Box>
   );

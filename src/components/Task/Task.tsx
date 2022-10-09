@@ -162,7 +162,8 @@ export const Task = () => {
           text: newComment,
         }
       );
-      navigate(0);
+      getTask();
+      setNewComment("");
     } catch (error) {
       console.log(error);
     }
@@ -256,6 +257,7 @@ export const Task = () => {
                     text={comment.text}
                     createdAt={comment.createdAt}
                     author={comment.author}
+                    getTask={getTask}
                   />
                 ))}
               </Box>
