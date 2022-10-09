@@ -4,6 +4,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 
+import { Task } from "../Project/Project";
+
 import {
   Dialog,
   DialogTitle,
@@ -23,7 +25,8 @@ type CreateTaskDialogProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
   length: number;
-  orgId?: string;
+  task?: Task;
+  edit?: boolean;
 };
 
 type Contributor = {
@@ -47,32 +50,49 @@ export const CreateTaskDialog = ({
   open,
   setOpen,
   length,
+  task,
+  edit = false,
 }: CreateTaskDialogProps) => {
   const [contributors, setContributors] = useState<Contributor[]>([]);
   const navigate = useNavigate();
-  const { id, projectId } = useParams();
+  const { id, projectId, taskId } = useParams();
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
-      deadline: null,
-      assigneeId: 0,
+      name: edit ? task?.name : "",
+      description: edit ? task?.description : "",
+      deadline: edit ? task?.deadline : null,
+      assigneeId: edit ? task?.assignee?.id : 0,
     },
+    enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        await axios({
-          method: "post",
-          url: `/api/organizations/${id}/projects/${projectId}/tasks`,
-          data: {
-            name: values.name,
-            description: values.description,
-            ...(values.deadline ? { deadline: values.deadline } : {}),
-            assigneeId: values.assigneeId,
-            order: length + 1,
-          },
-        });
+        edit
+          ? await axios({
+              method: "patch",
+              url: `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`,
+              data: {
+                name: values.name,
+                description: values.description,
+                ...(values.deadline ? { deadline: values.deadline } : {}),
+                assigneeId: values.assigneeId,
+                order: length + 1,
+              },
+            })
+          : await axios({
+              method: "post",
+              url: `/api/organizations/${id}/projects/${projectId}/tasks${
+                taskId ? `/${taskId}` : ""
+              }`,
+              data: {
+                name: values.name,
+                description: values.description,
+                ...(values.deadline ? { deadline: values.deadline } : {}),
+                assigneeId: values.assigneeId,
+                order: length + 1,
+              },
+            });
         setOpen(false);
         navigate(0);
       } catch (e: any) {
@@ -102,7 +122,7 @@ export const CreateTaskDialog = ({
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Create new task</DialogTitle>
+      <DialogTitle>{edit ? "Edit task" : "Create new task"}</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
@@ -162,7 +182,7 @@ export const CreateTaskDialog = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button type="submit">{edit ? "Edit" : "Create"}</Button>
         </DialogActions>
       </form>
     </Dialog>

@@ -32,7 +32,7 @@ export const SignUp = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await axios({
+        await axios({
           method: "post",
           url: "/api/users/signup",
           data: {
@@ -40,6 +40,14 @@ export const SignUp = () => {
             password: values.password,
             name: values.username,
             profilePicture: image,
+          },
+        });
+        const res = await axios({
+          method: "post",
+          url: "/api/users/login",
+          data: {
+            email: values.email,
+            password: values.password,
           },
         });
         navigate("/home");
