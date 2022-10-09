@@ -16,9 +16,11 @@ type ConfirmDeleteDialogProps = {
   setOpen: (value: boolean) => void;
   deleteProject?: boolean;
   deleteTask?: boolean;
+  deleteComment?: boolean;
   orgId?: string;
   projectId?: string;
   taskId?: string;
+  commentId?: number;
 };
 
 export const ConfirmDeleteDialog = ({
@@ -26,9 +28,11 @@ export const ConfirmDeleteDialog = ({
   setOpen,
   deleteProject = false,
   deleteTask = false,
+  deleteComment = false,
   orgId,
   projectId,
   taskId,
+  commentId,
 }: ConfirmDeleteDialogProps) => {
   const navigate = useNavigate();
 
@@ -47,6 +51,12 @@ export const ConfirmDeleteDialog = ({
       );
       setOpen(false);
       navigate(`/organization/${orgId}/project/${projectId}`);
+    } else if (deleteComment) {
+      await axios.delete(
+        `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}/delete-comment/${commentId}`
+      );
+      setOpen(false);
+      navigate(0);
     } else {
       await axios.delete(`/api/organizations/${orgId}`);
       setOpen(false);

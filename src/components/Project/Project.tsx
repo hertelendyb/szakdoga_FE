@@ -16,6 +16,8 @@ import {
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
 import { SortableTask } from "../SortableTask/SortableTask";
 import { CreateTaskDialog } from "../CreateTaskDialog/CreateTaskDialog";
+import { TaskComment } from "../Task/Task";
+import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
 
 import {
   Box,
@@ -24,7 +26,6 @@ import {
   Breadcrumbs,
   Link as MUILink,
 } from "@mui/material";
-import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
 
 export interface Task {
   id: number;
@@ -34,9 +35,11 @@ export interface Task {
   done: boolean;
   deadline: string;
   assignee: {
+    id: number;
     name: string;
   };
   childTasks: Task[];
+  comments: TaskComment[];
 }
 
 export const Project = () => {
@@ -52,8 +55,9 @@ export const Project = () => {
       order: 0,
       done: false,
       deadline: "",
-      assignee: { name: "" },
+      assignee: { id: 0, name: "" },
       childTasks: [],
+      comments: [],
     },
   ]);
   const [createOpen, setCreateOpen] = useState(false);
