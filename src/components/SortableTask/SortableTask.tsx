@@ -10,6 +10,7 @@ import {
   CardActions,
   CardContent,
   Checkbox,
+  Grid,
   IconButton,
   Typography,
 } from "@mui/material";
@@ -66,18 +67,32 @@ export const SortableTask = ({
           justifyContent: "space-around",
         }}
       >
-        <Link to={`/organization/${id}/project/${projectId}/task/${taskId}`}>
-          {name}
-        </Link>
-        <Typography>
-          {task.assignee?.name ? task.assignee.name : "No assignee"}
-        </Typography>
-        <Typography>{task.deadline ? task.deadline : "No deadline"}</Typography>
-        <Typography>
-          {task.childTasks?.length
-            ? `${task.childTasks.length} subtask(s)`
-            : "No subtasks"}
-        </Typography>
+        <Grid container>
+          <Grid item xs={3}>
+            <Link
+              to={`/organization/${id}/project/${projectId}/task/${taskId}`}
+            >
+              {name}
+            </Link>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              {task.assignee?.name ? task.assignee.name : "No assignee"}
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              {task.deadline ? task.deadline : "No deadline"}
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography>
+              {task.childTasks?.length
+                ? `${task.childTasks.length} subtask(s)`
+                : "No subtasks"}
+            </Typography>
+          </Grid>
+        </Grid>
       </CardContent>
       <CardActions>
         <Checkbox checked={isDone} onChange={handleCheck} />

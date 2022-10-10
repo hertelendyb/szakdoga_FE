@@ -20,6 +20,7 @@ import { CreateTaskDialog } from "../CreateTaskDialog/CreateTaskDialog";
 import { Log } from "../Log/Log";
 import { Task as TaskType } from "../Project/Project";
 import { SortableTask } from "../SortableTask/SortableTask";
+import { TaskHeader } from "../TaskHeader/TaskHeader";
 
 import { Box, Button, Chip, Grid, TextField, Typography } from "@mui/material";
 
@@ -268,6 +269,7 @@ export const Task = () => {
       </Grid>
       <Grid item xs={7}>
         <Typography variant="h5">Subtasks</Typography>
+        <TaskHeader />
         <DndContext
           modifiers={[restrictToVerticalAxis, restrictToParentElement]}
           onDragEnd={handleDragEnd}

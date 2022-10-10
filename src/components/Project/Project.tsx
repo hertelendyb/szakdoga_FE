@@ -19,6 +19,7 @@ import { SortableTask } from "../SortableTask/SortableTask";
 import { CreateTaskDialog } from "../CreateTaskDialog/CreateTaskDialog";
 import { TaskComment } from "../Task/Task";
 import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
+import { TaskHeader } from "../TaskHeader/TaskHeader";
 
 import {
   Box,
@@ -150,6 +151,7 @@ export const Project = () => {
         <Typography color="text.primary">{projectName}</Typography>
       </Breadcrumbs>
       <Typography variant="h5">{projectName}</Typography>
+      <TaskHeader />
       <Box>
         <DndContext
           modifiers={[restrictToVerticalAxis, restrictToParentElement]}
