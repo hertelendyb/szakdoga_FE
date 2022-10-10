@@ -3,6 +3,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { toast } from "react-toastify";
 
 import { setUser } from "../../store/slices/userSlice";
 import { Dropzone } from "../Dropzone/Dropzone";
@@ -53,7 +54,7 @@ export const SignUp = () => {
         navigate("/home");
         dispatch(setUser({ user: res.data }));
       } catch (e: any) {
-        alert(e.message);
+        toast.error(e.response.data.message);
       }
     },
   });

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import orderBy from "lodash/orderBy";
 import { DndContext } from "@dnd-kit/core";
@@ -12,6 +12,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { toast } from "react-toastify";
 
 import { Comment } from "../Comment/Comment";
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
@@ -64,7 +65,6 @@ export const Task = () => {
     comments: [],
   });
   const { id, projectId, taskId } = useParams();
-  const navigate = useNavigate();
 
   const getTask = useCallback(async () => {
     try {
@@ -73,8 +73,8 @@ export const Task = () => {
       );
       setTask(res.data);
       setComments(orderBy(res.data.comments, ["createdAt"], ["desc"]));
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   }, [id, projectId, taskId]);
 
@@ -85,8 +85,8 @@ export const Task = () => {
       );
       const ordered = orderBy(res.data, ["timestamp"], ["desc"]);
       setLogs(ordered);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   }, [id, projectId, taskId]);
 
@@ -108,8 +108,8 @@ export const Task = () => {
         prevtask.childTasks[taskIndex] = { ...res.data };
         return { ...prevtask };
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
 
@@ -140,13 +140,14 @@ export const Task = () => {
         );
 
         const newTaskArray = arrayMove(task.childTasks, oldIndex, newIndex);
-        newTaskArray.forEach((task, index) =>
-          axios.patch(
-            `/api/organizations/${id}/projects/${projectId}/tasks/${task.id}`,
-            {
-              order: index + 1,
-            }
-          )
+        newTaskArray.forEach(
+          async (task, index) =>
+            await axios.patch(
+              `/api/organizations/${id}/projects/${projectId}/tasks/${task.id}`,
+              {
+                order: index + 1,
+              }
+            )
         );
         task.childTasks = newTaskArray;
         return { ...task };
@@ -164,8 +165,8 @@ export const Task = () => {
       );
       getTask();
       setNewComment("");
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
 

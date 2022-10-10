@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { ToastContainer } from "react-toastify";
 
 import { store } from "./store/store";
 import { layoutLoader } from "./components/Layout/Layout";
@@ -21,6 +22,7 @@ import {
 } from "./components";
 
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -74,6 +76,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <ToastContainer />
         <RouterProvider router={router} />
       </LocalizationProvider>
     </Provider>

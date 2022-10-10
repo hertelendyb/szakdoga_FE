@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import { Box, Button, TextField } from "@mui/material";
 import { setUser } from "../../store/slices/userSlice";
@@ -36,7 +37,7 @@ export const Login = () => {
       navigate("/home");
       dispatch(setUser({ user: res.data }));
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.response.data.message);
     }
   };
 

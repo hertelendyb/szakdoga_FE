@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import {
   Dialog,
@@ -36,15 +37,19 @@ export const EditCommentDialog = ({
   };
 
   const handleEditComment = async () => {
-    await axios({
-      method: "patch",
-      url: `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/edit-comment/${commentId}`,
-      data: {
-        text: comment,
-      },
-    });
-    setOpen(false);
-    getTask();
+    try {
+      await axios({
+        method: "patch",
+        url: `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/edit-comment/${commentId}`,
+        data: {
+          text: comment,
+        },
+      });
+      setOpen(false);
+      getTask();
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    }
   };
 
   return (

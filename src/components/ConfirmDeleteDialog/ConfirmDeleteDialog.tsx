@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import {
   Dialog,
@@ -42,25 +43,41 @@ export const ConfirmDeleteDialog = ({
 
   const handleDelete = async () => {
     if (deleteProject) {
-      await axios.delete(`/api/organizations/${orgId}/projects/${projectId}`);
-      setOpen(false);
-      navigate(`/organization/${orgId}`);
+      try {
+        await axios.delete(`/api/organizations/${orgId}/projects/${projectId}`);
+        setOpen(false);
+        navigate(`/organization/${orgId}`);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      }
     } else if (deleteTask) {
-      await axios.delete(
-        `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}`
-      );
-      setOpen(false);
-      navigate(`/organization/${orgId}/project/${projectId}`);
+      try {
+        await axios.delete(
+          `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}`
+        );
+        setOpen(false);
+        navigate(`/organization/${orgId}/project/${projectId}`);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      }
     } else if (deleteComment) {
-      await axios.delete(
-        `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}/delete-comment/${commentId}`
-      );
-      setOpen(false);
-      navigate(0);
+      try {
+        await axios.delete(
+          `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}/delete-comment/${commentId}`
+        );
+        setOpen(false);
+        navigate(0);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      }
     } else {
-      await axios.delete(`/api/organizations/${orgId}`);
-      setOpen(false);
-      navigate("/home");
+      try {
+        await axios.delete(`/api/organizations/${orgId}`);
+        setOpen(false);
+        navigate("/home");
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      }
     }
   };
 

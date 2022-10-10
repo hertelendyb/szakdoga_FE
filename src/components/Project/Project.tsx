@@ -12,6 +12,7 @@ import {
   restrictToParentElement,
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
+import { toast } from "react-toastify";
 
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
 import { SortableTask } from "../SortableTask/SortableTask";
@@ -70,8 +71,8 @@ export const Project = () => {
       );
       const tasks: Task[] = sortBy(res.data, ["order"]);
       setTasks(tasks);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   }, [id, projectId]);
 
@@ -122,8 +123,8 @@ export const Project = () => {
         prevtasks[taskIndex] = { ...res.data };
         return [...prevtasks];
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
 
@@ -208,6 +209,7 @@ export const Project = () => {
         orgId={id}
         projectId={projectId}
         addPO={isPO}
+        addToProject
       />
     </Box>
   );
