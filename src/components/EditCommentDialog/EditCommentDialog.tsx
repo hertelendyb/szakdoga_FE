@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import {
   Dialog,
@@ -16,6 +16,7 @@ type EditCommentDialogProps = {
   setOpen: (value: boolean) => void;
   oldComment: string;
   commentId: number;
+  getTask: () => void;
 };
 
 export const EditCommentDialog = ({
@@ -23,9 +24,9 @@ export const EditCommentDialog = ({
   setOpen,
   oldComment,
   commentId,
+  getTask,
 }: EditCommentDialogProps) => {
   const [comment, setComment] = useState("");
-  const navigate = useNavigate();
   const { id, projectId, taskId } = useParams();
 
   useEffect(() => setComment(oldComment), [oldComment]);
@@ -43,7 +44,7 @@ export const EditCommentDialog = ({
       },
     });
     setOpen(false);
-    navigate(0);
+    getTask();
   };
 
   return (
