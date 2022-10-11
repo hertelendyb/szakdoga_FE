@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import { Task } from "../Project/Project";
 
@@ -96,7 +97,7 @@ export const CreateTaskDialog = ({
         setOpen(false);
         navigate(0);
       } catch (e: any) {
-        alert(e.message);
+        toast.error(e.response.data.message);
       }
     },
   });
@@ -110,7 +111,7 @@ export const CreateTaskDialog = ({
     };
 
     getContributors();
-  }, [id, projectId]);
+  }, [id, projectId, open]);
 
   const handleClose = () => {
     setOpen(false);

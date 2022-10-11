@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import {
   Dialog,
@@ -18,6 +18,7 @@ type AddUserDialogProps = {
   orgId?: string;
   projectId?: string;
   addPO?: boolean;
+  addToProject?: boolean;
 };
 
 export const AddUserDialog = ({
@@ -26,9 +27,9 @@ export const AddUserDialog = ({
   orgId,
   projectId,
   addPO = false,
+  addToProject = false,
 }: AddUserDialogProps) => {
   const [email, setEmail] = useState("");
-  const navigate = useNavigate();
 
   const handleClose = () => {
     setOpen(false);
@@ -46,9 +47,9 @@ export const AddUserDialog = ({
         },
       });
       setOpen(false);
-      navigate(0);
+      toast.success("User added successfully");
     } catch (error: any) {
-      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -64,9 +65,9 @@ export const AddUserDialog = ({
         },
       });
       setOpen(false);
-      navigate(0);
+      toast.success("User added successfully");
     } catch (error: any) {
-      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -87,7 +88,11 @@ export const AddUserDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleAddUserToProject}>Add</Button>
+        <Button
+          onClick={addToProject ? handleAddUserToProject : handleAddUserToOrg}
+        >
+          Add
+        </Button>
       </DialogActions>
     </Dialog>
   );

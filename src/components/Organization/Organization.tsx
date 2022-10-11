@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useLoaderData, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
 import { CreateDialog } from "../CreateDialog/CreateDialog";
@@ -14,12 +15,15 @@ import {
   Typography,
   Link as MUILink,
 } from "@mui/material";
+import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
 
 export const Organization = () => {
   const { id } = useParams();
   const [projects, setProjects] = useState([{ id: null, name: "" }]);
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
+  const [isPO, setIsPO] = useState(false);
   const orgName = useLoaderData();
 
   useEffect(() => {
@@ -27,8 +31,8 @@ export const Organization = () => {
       try {
         const res = await axios.get(`/api/organizations/${id}`);
         setProjects(res.data.projects);
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
       }
     };
 
@@ -41,6 +45,16 @@ export const Organization = () => {
 
   const openDeleteDialog = () => {
     setDeleteOpen(true);
+  };
+
+  const openAddContributorDialog = () => {
+    setIsPO(false);
+    setAddOpen(true);
+  };
+
+  const openAddProjectOwnerDialog = () => {
+    setIsPO(true);
+    setAddOpen(true);
   };
 
   return (
@@ -74,6 +88,20 @@ export const Organization = () => {
         <Button variant="contained" color="error" onClick={openDeleteDialog}>
           Delete organization
         </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={openAddContributorDialog}
+        >
+          Add contributor to this organization
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={openAddProjectOwnerDialog}
+        >
+          Add PO to this organization
+        </Button>
       </Box>
       <CreateDialog
         open={createOpen}
@@ -85,6 +113,12 @@ export const Organization = () => {
         open={deleteOpen}
         setOpen={setDeleteOpen}
         orgId={id}
+      />
+      <AddUserDialog
+        open={addOpen}
+        setOpen={setAddOpen}
+        orgId={id}
+        addPO={isPO}
       />
     </Box>
   );

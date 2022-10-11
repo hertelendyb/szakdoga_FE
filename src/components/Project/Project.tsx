@@ -12,12 +12,14 @@ import {
   restrictToParentElement,
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
+import { toast } from "react-toastify";
 
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
 import { SortableTask } from "../SortableTask/SortableTask";
 import { CreateTaskDialog } from "../CreateTaskDialog/CreateTaskDialog";
 import { TaskComment } from "../Task/Task";
 import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
+import { TaskHeader } from "../TaskHeader/TaskHeader";
 
 import {
   Box,
@@ -70,8 +72,8 @@ export const Project = () => {
       );
       const tasks: Task[] = sortBy(res.data, ["order"]);
       setTasks(tasks);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   }, [id, projectId]);
 
@@ -122,8 +124,8 @@ export const Project = () => {
         prevtasks[taskIndex] = { ...res.data };
         return [...prevtasks];
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
 
@@ -149,6 +151,7 @@ export const Project = () => {
         <Typography color="text.primary">{projectName}</Typography>
       </Breadcrumbs>
       <Typography variant="h5">{projectName}</Typography>
+      <TaskHeader />
       <Box>
         <DndContext
           modifiers={[restrictToVerticalAxis, restrictToParentElement]}
@@ -208,6 +211,7 @@ export const Project = () => {
         orgId={id}
         projectId={projectId}
         addPO={isPO}
+        addToProject
       />
     </Box>
   );
