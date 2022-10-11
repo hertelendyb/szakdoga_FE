@@ -11,9 +11,7 @@ export const loginLoader = async () => {
     if (res.status === 200) {
       return redirect("/home");
     }
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 };
 
 export const Login = () => {

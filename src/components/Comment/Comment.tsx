@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { format, parseJSON } from "date-fns";
 
 import { useAppSelector } from "../../store/hooks";
 import { selectUser } from "../../store/slices/userSlice";
 import { TaskComment } from "../Task/Task";
 import { EditCommentDialog } from "../EditCommentDialog/EditCommentDialog";
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
+import { formatDate } from "../../utils/formatDate";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -23,13 +23,17 @@ export const Comment = ({
   author,
   getTask,
 }: CommentProps) => {
-  const parsedTime = parseJSON(createdAt);
-  const formattedTime = format(parsedTime, "yyyy-MM-dd HH:mm:ss");
   const [open, setOpen] = useState(false);
+  const [formatedTime, setFormatedTime] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const { id, projectId, taskId } = useParams();
 
   const { user } = useAppSelector(selectUser);
+
+  useEffect(() => {
+    const time = formatDate(createdAt);
+    setFormatedTime(time);
+  }, [createdAt]);
 
   const editComment = () => {
     setEditOpen(true);
@@ -72,7 +76,7 @@ export const Comment = ({
             }}
           >
             <Typography variant="caption">{author.name}</Typography>
-            <Typography variant="caption">{formattedTime}</Typography>
+            <Typography variant="caption">{formatedTime}</Typography>
           </Box>
           <Typography variant="body1">{text}</Typography>
         </Box>

@@ -344,6 +344,7 @@ export const Task = () => {
         open={createOpen}
         setOpen={setCreateOpen}
         length={task.childTasks?.length || 0}
+        getTask={getTask}
       />
     </Grid>
   );

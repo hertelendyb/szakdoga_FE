@@ -1,5 +1,6 @@
-import React from "react";
-import { format, parseJSON } from "date-fns";
+import React, { useEffect, useState } from "react";
+
+import { formatDate } from "../../utils/formatDate";
 
 import { Box, Typography } from "@mui/material";
 
@@ -9,8 +10,12 @@ type LogProps = {
 };
 
 export const Log = ({ text, timestamp }: LogProps) => {
-  const parsedTime = parseJSON(timestamp);
-  const formattedTime = format(parsedTime, "yyyy-MM-dd HH:mm:ss");
+  const [formatedTime, setFormatedTime] = useState("");
+
+  useEffect(() => {
+    const time = formatDate(timestamp);
+    setFormatedTime(time);
+  }, [timestamp]);
 
   return (
     <Box
@@ -19,7 +24,7 @@ export const Log = ({ text, timestamp }: LogProps) => {
         p: 1,
       }}
     >
-      <Typography variant="caption">{formattedTime}</Typography>
+      <Typography variant="caption">{formatedTime}</Typography>
       <Typography variant="body1">{text}</Typography>
     </Box>
   );

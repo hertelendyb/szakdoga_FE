@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
@@ -28,6 +28,8 @@ type CreateTaskDialogProps = {
   length: number;
   task?: Task;
   edit?: boolean;
+  getTasks?: () => void;
+  getTask?: () => void;
 };
 
 type Contributor = {
@@ -53,9 +55,10 @@ export const CreateTaskDialog = ({
   length,
   task,
   edit = false,
+  getTasks = () => null,
+  getTask = () => null,
 }: CreateTaskDialogProps) => {
   const [contributors, setContributors] = useState<Contributor[]>([]);
-  const navigate = useNavigate();
   const { id, projectId, taskId } = useParams();
 
   const formik = useFormik({
@@ -95,7 +98,7 @@ export const CreateTaskDialog = ({
               },
             });
         setOpen(false);
-        navigate(0);
+        !task ? getTasks() : getTask();
       } catch (e: any) {
         toast.error(e.response.data.message);
       }
