@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 
-import { setUser } from "../../store/slices/userSlice";
 import { Dropzone } from "../Dropzone/Dropzone";
-import { useAppDispatch } from "../../store/hooks";
 
 import { Box, TextField, Button } from "@mui/material";
 
@@ -23,7 +21,6 @@ const validationSchema = yup.object({
 export const SignUp = () => {
   const [image, setImage] = useState("");
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -43,7 +40,7 @@ export const SignUp = () => {
             profilePicture: image,
           },
         });
-        const res = await axios({
+        await axios({
           method: "post",
           url: "/api/users/login",
           data: {
@@ -52,7 +49,6 @@ export const SignUp = () => {
           },
         });
         navigate("/home");
-        dispatch(setUser({ user: res.data }));
       } catch (e: any) {
         toast.error(e.response.data.message);
       }

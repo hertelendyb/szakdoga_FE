@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 import { ConfirmDeleteDialog } from "../ConfirmDeleteDialog/ConfirmDeleteDialog";
 import { CreateDialog } from "../CreateDialog/CreateDialog";
 import { ProjectCard } from "../ProjectCard/ProjectCard";
+import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
+import { useAppSelector } from "../../store/hooks";
+import { selectUser } from "../../store/slices/userSlice";
 
 import {
   Box,
@@ -15,7 +18,6 @@ import {
   Typography,
   Link as MUILink,
 } from "@mui/material";
-import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
 
 export const Organization = () => {
   const { id } = useParams();
@@ -24,7 +26,10 @@ export const Organization = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [isPO, setIsPO] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const orgName = useLoaderData();
+
+  const { orgPermissions } = useAppSelector(selectUser);
 
   useEffect(() => {
     const getOrganization = async () => {
@@ -36,8 +41,19 @@ export const Organization = () => {
       }
     };
 
+    const havePermission = orgPermissions.filter(
+      (permission) =>
+        permission.roleId === 1 &&
+        permission.organizationId === parseInt(id as string, 10)
+    );
+    if (havePermission.length) {
+      setIsOwner(true);
+    } else {
+      setIsOwner(false);
+    }
+
     getOrganization();
-  }, [id]);
+  }, [id, orgPermissions]);
 
   const openCreateDialog = () => {
     setCreateOpen(true);
@@ -81,28 +97,30 @@ export const Organization = () => {
           <Grid item xs={3}></Grid>
         </Grid>
       )}
-      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 3 }}>
-        <Button variant="contained" onClick={openCreateDialog}>
-          Create new project
-        </Button>
-        <Button variant="contained" color="error" onClick={openDeleteDialog}>
-          Delete organization
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={openAddContributorDialog}
-        >
-          Add contributor to this organization
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={openAddProjectOwnerDialog}
-        >
-          Add PO to this organization
-        </Button>
-      </Box>
+      {isOwner ? (
+        <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 3 }}>
+          <Button variant="contained" onClick={openCreateDialog}>
+            Create new project
+          </Button>
+          <Button variant="contained" color="error" onClick={openDeleteDialog}>
+            Delete organization
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={openAddContributorDialog}
+          >
+            Add contributor to this organization
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={openAddProjectOwnerDialog}
+          >
+            Add PO to this organization
+          </Button>
+        </Box>
+      ) : null}
       <CreateDialog
         open={createOpen}
         setOpen={setCreateOpen}

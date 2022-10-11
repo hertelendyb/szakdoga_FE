@@ -4,8 +4,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import { Box, Button, TextField } from "@mui/material";
-import { setUser } from "../../store/slices/userSlice";
-import { useAppDispatch } from "../../store/hooks";
 
 export const loginLoader = async () => {
   try {
@@ -22,11 +20,10 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const handleLogin = async () => {
     try {
-      const res = await axios({
+      await axios({
         method: "post",
         url: "/api/users/login",
         data: {
@@ -35,7 +32,6 @@ export const Login = () => {
         },
       });
       navigate("/home");
-      dispatch(setUser({ user: res.data }));
     } catch (e: any) {
       toast.error(e.response.data.message);
     }

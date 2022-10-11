@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import orderBy from "lodash/orderBy";
 import { DndContext } from "@dnd-kit/core";
@@ -21,6 +21,8 @@ import { Log } from "../Log/Log";
 import { Task as TaskType } from "../Project/Project";
 import { SortableTask } from "../SortableTask/SortableTask";
 import { TaskHeader } from "../TaskHeader/TaskHeader";
+import { useAppSelector } from "../../store/hooks";
+import { selectUser } from "../../store/slices/userSlice";
 
 import { Box, Button, Chip, Grid, TextField, Typography } from "@mui/material";
 
@@ -54,6 +56,8 @@ export const Task = () => {
   const [comments, setComments] = useState<TaskComment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [edit, setEdit] = useState(false);
+  const [orgContributor, setOrgContributor] = useState(false);
+  const [projectContributor, setProjectContributor] = useState(false);
   const [task, setTask] = useState<TaskType>({
     id: 0,
     name: "",
@@ -66,6 +70,8 @@ export const Task = () => {
     comments: [],
   });
   const { id, projectId, taskId } = useParams();
+
+  const { orgPermissions, projectPermissions } = useAppSelector(selectUser);
 
   const getTask = useCallback(async () => {
     try {
@@ -92,9 +98,33 @@ export const Task = () => {
   }, [id, projectId, taskId]);
 
   useEffect(() => {
+    const isOrgContributor = orgPermissions.filter(
+      (permission) =>
+        permission.roleId === 3 &&
+        permission.organizationId === parseInt(id as string, 10)
+    );
+
+    const isProjectContributor = projectPermissions.filter(
+      (permission) =>
+        permission.roleId === 3 &&
+        permission.projectId === parseInt(projectId as string, 10)
+    );
+
+    if (isOrgContributor.length) {
+      setOrgContributor(true);
+    } else {
+      setOrgContributor(false);
+    }
+
+    if (isProjectContributor.length) {
+      setProjectContributor(true);
+    } else {
+      setProjectContributor(false);
+    }
+
     getTask();
     getLogs();
-  }, [getLogs, getTask]);
+  }, [getLogs, getTask, id, orgPermissions, projectId, projectPermissions]);
 
   const handleCheck = async (taskId: number, isDone: boolean) => {
     try {
@@ -174,6 +204,9 @@ export const Task = () => {
   return (
     <Grid container>
       <Grid item xs={5}>
+        <Link to={`/organization/${id}/project/${projectId}`}>
+          Back to project
+        </Link>
         <Typography variant="h5">{task?.name}</Typography>
         <Typography variant="h6">Description</Typography>
         <Typography variant="body1">{task?.description}</Typography>
@@ -202,9 +235,15 @@ export const Task = () => {
           <Button variant="contained" onClick={openCreateDialog}>
             Create new subtask
           </Button>
-          <Button variant="contained" color="error" onClick={openDeleteDialog}>
-            Delete task
-          </Button>
+          {orgContributor || projectContributor ? null : (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={openDeleteDialog}
+            >
+              Delete task
+            </Button>
+          )}
           <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
             <Chip
               sx={!showLogs ? { backgroundColor: "blue", color: "white" } : {}}

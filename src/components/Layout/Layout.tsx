@@ -11,7 +11,7 @@ import { Box } from "@mui/material";
 export const layoutLoader = async () => {
   try {
     const res = await axios.get("/api/users/me");
-    store.dispatch(setUser({ user: res.data }));
+    store.dispatch(setUser(res.data));
   } catch (err: any) {
     if (err.response.status === 401) {
       return redirect("/login");

@@ -8,6 +8,18 @@ interface UserState {
     email: string;
     profilePicture: string | null;
   };
+  orgPermissions: Array<{
+    id: number;
+    userId: number;
+    roleId: number;
+    organizationId: number;
+  }>;
+  projectPermissions: Array<{
+    id: number;
+    userId: number;
+    roleId: number;
+    projectId: number;
+  }>;
 }
 
 const initialState: UserState = {
@@ -17,6 +29,8 @@ const initialState: UserState = {
     email: "",
     profilePicture: null,
   },
+  orgPermissions: [],
+  projectPermissions: [],
 };
 
 export const userSlice = createSlice({
@@ -25,9 +39,13 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<UserState>) => {
       state.user = { ...action.payload.user };
+      state.orgPermissions = action.payload.orgPermissions;
+      state.projectPermissions = action.payload.projectPermissions;
     },
     clearUser: (state) => {
       state.user = initialState.user;
+      state.orgPermissions = initialState.orgPermissions;
+      state.projectPermissions = initialState.projectPermissions;
     },
   },
 });
