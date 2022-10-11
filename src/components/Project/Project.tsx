@@ -20,6 +20,8 @@ import { CreateTaskDialog } from "../CreateTaskDialog/CreateTaskDialog";
 import { TaskComment } from "../Task/Task";
 import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
 import { TaskHeader } from "../TaskHeader/TaskHeader";
+import { useAppSelector } from "../../store/hooks";
+import { selectUser } from "../../store/slices/userSlice";
 
 import {
   Box,
@@ -64,6 +66,10 @@ export const Project = () => {
   ]);
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [orgContributor, setOrgContributor] = useState(false);
+  const [projectContributor, setProjectContributor] = useState(false);
+
+  const { orgPermissions, projectPermissions } = useAppSelector(selectUser);
 
   const getTasks = useCallback(async () => {
     try {
@@ -78,8 +84,32 @@ export const Project = () => {
   }, [id, projectId]);
 
   useEffect(() => {
+    const isOrgContributor = orgPermissions.filter(
+      (permission) =>
+        permission.roleId === 3 &&
+        permission.organizationId === parseInt(id as string, 10)
+    );
+
+    const isProjectContributor = projectPermissions.filter(
+      (permission) =>
+        permission.roleId === 3 &&
+        permission.projectId === parseInt(projectId as string, 10)
+    );
+
+    if (isOrgContributor.length) {
+      setOrgContributor(true);
+    } else {
+      setOrgContributor(false);
+    }
+
+    if (isProjectContributor.length) {
+      setProjectContributor(true);
+    } else {
+      setProjectContributor(false);
+    }
+
     getTasks();
-  }, [getTasks]);
+  }, [getTasks, id, orgPermissions, projectId, projectPermissions]);
 
   const openCreateDialog = () => {
     setCreateOpen(true);
@@ -145,9 +175,17 @@ export const Project = () => {
         <MUILink underline="hover" color="inherit" href="/home">
           Home
         </MUILink>
-        <MUILink underline="hover" color="inherit" href={`/organization/${id}`}>
-          {orgName}
-        </MUILink>
+        {!projectContributor ? (
+          <MUILink
+            underline="hover"
+            color="inherit"
+            href={`/organization/${id}`}
+          >
+            {orgName}
+          </MUILink>
+        ) : (
+          <Typography>{orgName}</Typography>
+        )}
         <Typography color="text.primary">{projectName}</Typography>
       </Breadcrumbs>
       <Typography variant="h5">{projectName}</Typography>
@@ -175,23 +213,31 @@ export const Project = () => {
         <Button variant="contained" onClick={openCreateDialog}>
           Create new task
         </Button>
-        <Button variant="contained" color="error" onClick={openDeleteDialog}>
-          Delete project
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={openAddContributorDialog}
-        >
-          Add contributor to this project
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={openAddProjectOwnerDialog}
-        >
-          Add PO to this project
-        </Button>
+        {!projectContributor && !orgContributor ? (
+          <>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={openDeleteDialog}
+            >
+              Delete project
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={openAddContributorDialog}
+            >
+              Add contributor to this project
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={openAddProjectOwnerDialog}
+            >
+              Add PO to this project
+            </Button>
+          </>
+        ) : null}
       </Box>
       <CreateTaskDialog
         open={createOpen}
