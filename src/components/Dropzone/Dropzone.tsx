@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast } from "react-toastify";
 
 import "./styles.css";
 
@@ -41,8 +42,9 @@ export const Dropzone = ({ image, setImage }: DropzoneProps) => {
       acceptedFiles.forEach((file: any) => {
         const reader = new FileReader();
 
-        reader.onabort = () => console.log("file reading was aborted");
-        reader.onerror = () => console.log("file reading has failed");
+        reader.onabort = () => toast.error("File reading was aborted");
+        reader.onerror = () =>
+          toast.error("Something went wrong. Please try again");
         reader.onload = () => {
           const binaryStr = reader.result;
           setImage(binaryStr as string);

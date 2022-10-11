@@ -243,6 +243,7 @@ export const Project = () => {
         open={createOpen}
         setOpen={setCreateOpen}
         length={tasks.length}
+        getTasks={getTasks}
       />
       <ConfirmDeleteDialog
         open={deleteOpen}
