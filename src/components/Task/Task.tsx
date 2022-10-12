@@ -23,6 +23,7 @@ import { SortableTask } from "../SortableTask/SortableTask";
 import { TaskHeader } from "../TaskHeader/TaskHeader";
 import { useAppSelector } from "../../store/hooks";
 import { selectUser } from "../../store/slices/userSlice";
+import { MoveTaskDialog } from "../MoveTaskDialog/MoveTaskDialog";
 
 import { Box, Button, Chip, Grid, TextField, Typography } from "@mui/material";
 
@@ -51,6 +52,7 @@ export type TaskComment = {
 export const Task = () => {
   const [showLogs, setShowLogs] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [moveOpen, setMoveOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [logs, setLogs] = useState<LogType[]>([]);
   const [comments, setComments] = useState<TaskComment[]>([]);
@@ -148,6 +150,10 @@ export const Task = () => {
     setDeleteOpen(true);
   };
 
+  const openMoveDialog = () => {
+    setMoveOpen(true);
+  };
+
   const openCreateDialog = () => {
     setEdit(false);
     setCreateOpen(true);
@@ -211,7 +217,9 @@ export const Task = () => {
         <Typography variant="h6">Description</Typography>
         <Typography variant="body1">{task?.description}</Typography>
         <Typography variant="h6">Deadline</Typography>
-        <Typography variant="body1">{task?.deadline}</Typography>
+        <Typography variant="body1">
+          {task?.deadline ? task?.deadline : "-"}
+        </Typography>
         <Typography variant="h6">Assignee</Typography>
         <Typography variant="body1">
           {task?.assignee?.name ? task?.assignee?.name : "-"}
@@ -236,13 +244,22 @@ export const Task = () => {
             Create new subtask
           </Button>
           {orgContributor || projectContributor ? null : (
-            <Button
-              variant="contained"
-              color="error"
-              onClick={openDeleteDialog}
-            >
-              Delete task
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={openDeleteDialog}
+              >
+                Delete task
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={openMoveDialog}
+              >
+                Move task
+              </Button>
+            </>
           )}
           <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
             <Chip
@@ -346,6 +363,7 @@ export const Task = () => {
         length={task.childTasks?.length || 0}
         getTask={getTask}
       />
+      <MoveTaskDialog open={moveOpen} setOpen={setMoveOpen} />
     </Grid>
   );
 };

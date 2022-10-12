@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import sortBy from "lodash/sortBy";
-import { useLoaderData, useParams } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 import { DndContext } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -51,19 +51,7 @@ export const Project = () => {
   const { id, projectId } = useParams();
   const [addOpen, setAddOpen] = useState(false);
   const [isPO, setIsPO] = useState(false);
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: 0,
-      name: "",
-      description: "",
-      order: 0,
-      done: false,
-      deadline: "",
-      assignee: { id: 0, name: "" },
-      childTasks: [],
-      comments: [],
-    },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [orgContributor, setOrgContributor] = useState(false);
@@ -172,14 +160,15 @@ export const Project = () => {
   return (
     <Box>
       <Breadcrumbs aria-label="breadcrumb">
-        <MUILink underline="hover" color="inherit" href="/home">
+        <MUILink underline="hover" color="inherit" component={Link} to="/home">
           Home
         </MUILink>
         {!projectContributor ? (
           <MUILink
             underline="hover"
             color="inherit"
-            href={`/organization/${id}`}
+            component={Link}
+            to={`/organization/${id}`}
           >
             {orgName}
           </MUILink>

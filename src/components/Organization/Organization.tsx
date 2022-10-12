@@ -19,9 +19,14 @@ import {
   Link as MUILink,
 } from "@mui/material";
 
+export interface Project {
+  id: number;
+  name: string;
+}
+
 export const Organization = () => {
   const { id } = useParams();
-  const [projects, setProjects] = useState([{ id: null, name: "" }]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
@@ -76,7 +81,7 @@ export const Organization = () => {
   return (
     <Box>
       <Breadcrumbs aria-label="breadcrumb">
-        <MUILink underline="hover" color="inherit" href="/home">
+        <MUILink underline="hover" color="inherit" component={Link} to="/home">
           Home
         </MUILink>
         <Typography color="text.primary">{orgName as string}</Typography>
