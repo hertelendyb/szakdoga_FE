@@ -16,13 +16,13 @@ import {
 } from "@mui/material";
 import { DragHandle } from "@mui/icons-material";
 
-type SortableTaskProps = {
+interface SortableTaskProps {
   id: number;
   name: string;
   isDone: boolean;
   task: Task;
   handleCheck: () => void;
-};
+}
 
 export const SortableTask = ({
   id: taskId,
