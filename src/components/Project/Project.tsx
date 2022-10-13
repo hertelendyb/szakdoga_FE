@@ -22,6 +22,7 @@ import { AddUserDialog } from "../AddUserDialog/AddUserDialog";
 import { TaskHeader } from "../TaskHeader/TaskHeader";
 import { useAppSelector } from "../../store/hooks";
 import { selectUser } from "../../store/slices/userSlice";
+import { SectionMarker } from "../SectionMarker/SectionMarker";
 
 import {
   Box,
@@ -56,6 +57,7 @@ export const Project = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [orgContributor, setOrgContributor] = useState(false);
   const [projectContributor, setProjectContributor] = useState(false);
+  const [sectionMarker, setSectionMarker] = useState(false);
 
   const { orgPermissions, projectPermissions } = useAppSelector(selectUser);
 
@@ -100,6 +102,12 @@ export const Project = () => {
   }, [getTasks, id, orgPermissions, projectId, projectPermissions]);
 
   const openCreateDialog = () => {
+    setSectionMarker(false);
+    setCreateOpen(true);
+  };
+
+  const openCreateSectionMarkerDialog = () => {
+    setSectionMarker(true);
     setCreateOpen(true);
   };
 
@@ -185,22 +193,34 @@ export const Project = () => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-            {tasks.map((task) => (
-              <SortableTask
-                key={task.id}
-                id={task.id}
-                name={task.name}
-                isDone={task.done}
-                task={task}
-                handleCheck={() => handleCheck(task.id, task.done)}
-              />
-            ))}
+            {tasks.map((task) =>
+              task.description ? (
+                <SortableTask
+                  key={task.id}
+                  id={task.id}
+                  name={task.name}
+                  isDone={task.done}
+                  task={task}
+                  handleCheck={() => handleCheck(task.id, task.done)}
+                />
+              ) : (
+                <SectionMarker
+                  key={task.id}
+                  id={task.id}
+                  name={task.name}
+                  getTasks={getTasks}
+                />
+              )
+            )}
           </SortableContext>
         </DndContext>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 2, mt: 3 }}>
         <Button variant="contained" onClick={openCreateDialog}>
           Create new task
+        </Button>
+        <Button variant="contained" onClick={openCreateSectionMarkerDialog}>
+          Create section marker
         </Button>
         {!projectContributor && !orgContributor ? (
           <>
@@ -233,6 +253,7 @@ export const Project = () => {
         setOpen={setCreateOpen}
         length={tasks.length}
         getTasks={getTasks}
+        sectionMarker={sectionMarker}
       />
       <ConfirmDeleteDialog
         open={deleteOpen}

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import orderBy from "lodash/orderBy";
+import { sortBy, orderBy } from "lodash";
 import { DndContext } from "@dnd-kit/core";
 import {
   restrictToVerticalAxis,
@@ -24,6 +24,7 @@ import { TaskHeader } from "../TaskHeader/TaskHeader";
 import { useAppSelector } from "../../store/hooks";
 import { selectUser } from "../../store/slices/userSlice";
 import { MoveTaskDialog } from "../MoveTaskDialog/MoveTaskDialog";
+import { SectionMarker } from "../SectionMarker/SectionMarker";
 
 import { Box, Button, Chip, Grid, TextField, Typography } from "@mui/material";
 
@@ -60,6 +61,8 @@ export const Task = () => {
   const [edit, setEdit] = useState(false);
   const [orgContributor, setOrgContributor] = useState(false);
   const [projectContributor, setProjectContributor] = useState(false);
+  const [sectionMarker, setSectionMarker] = useState(false);
+  const [subtasks, setSubtasks] = useState<TaskType[]>([]);
   const [task, setTask] = useState<TaskType>({
     id: 0,
     name: "",
@@ -82,6 +85,7 @@ export const Task = () => {
       );
       setTask(res.data);
       setComments(orderBy(res.data.comments, ["createdAt"], ["desc"]));
+      setSubtasks(sortBy(res.data.childTasks, ["order"]));
     } catch (error: any) {
       toast.error(error.response.data.message);
     }
@@ -156,11 +160,19 @@ export const Task = () => {
 
   const openCreateDialog = () => {
     setEdit(false);
+    setSectionMarker(false);
+    setCreateOpen(true);
+  };
+
+  const openCreateSectionMarkerDialog = () => {
+    setEdit(false);
+    setSectionMarker(true);
     setCreateOpen(true);
   };
 
   const openEditDialog = () => {
     setEdit(true);
+    setSectionMarker(false);
     setCreateOpen(true);
   };
 
@@ -169,14 +181,10 @@ export const Task = () => {
 
     if (active.id !== over.id) {
       setTask((task) => {
-        const oldIndex = task.childTasks.findIndex(
-          (task) => task.id === active.id
-        );
-        const newIndex = task.childTasks.findIndex(
-          (task) => task.id === over.id
-        );
+        const oldIndex = subtasks.findIndex((task) => task.id === active.id);
+        const newIndex = subtasks.findIndex((task) => task.id === over.id);
 
-        const newTaskArray = arrayMove(task.childTasks, oldIndex, newIndex);
+        const newTaskArray = arrayMove(subtasks, oldIndex, newIndex);
         newTaskArray.forEach(
           async (task, index) =>
             await axios.patch(
@@ -186,7 +194,7 @@ export const Task = () => {
               }
             )
         );
-        task.childTasks = newTaskArray;
+        setSubtasks(newTaskArray);
         return { ...task };
       });
     }
@@ -242,6 +250,9 @@ export const Task = () => {
           </Button>
           <Button variant="contained" onClick={openCreateDialog}>
             Create new subtask
+          </Button>
+          <Button variant="contained" onClick={openCreateSectionMarkerDialog}>
+            Create section marker
           </Button>
           {orgContributor || projectContributor ? null : (
             <>
@@ -331,19 +342,28 @@ export const Task = () => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={task.childTasks}
+            items={subtasks}
             strategy={verticalListSortingStrategy}
           >
-            {task?.childTasks.map((task) => (
-              <SortableTask
-                key={task.id}
-                id={task.id}
-                name={task.name}
-                isDone={task.done}
-                task={task}
-                handleCheck={() => handleCheck(task.id, task.done)}
-              />
-            ))}
+            {subtasks.map((task) =>
+              task.description ? (
+                <SortableTask
+                  key={task.id}
+                  id={task.id}
+                  name={task.name}
+                  isDone={task.done}
+                  task={task}
+                  handleCheck={() => handleCheck(task.id, task.done)}
+                />
+              ) : (
+                <SectionMarker
+                  key={task.id}
+                  id={task.id}
+                  name={task.name}
+                  getTask={getTask}
+                />
+              )
+            )}
           </SortableContext>
         </DndContext>
       </Grid>
@@ -362,6 +382,7 @@ export const Task = () => {
         setOpen={setCreateOpen}
         length={task.childTasks?.length || 0}
         getTask={getTask}
+        sectionMarker={sectionMarker}
       />
       <MoveTaskDialog open={moveOpen} setOpen={setMoveOpen} />
     </Grid>
