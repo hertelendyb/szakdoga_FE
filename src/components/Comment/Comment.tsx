@@ -11,6 +11,7 @@ import { formatDate } from "../../utils/formatDate";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { styles } from "./styles";
 
 interface CommentProps extends TaskComment {
   getTask: () => void;
@@ -44,37 +45,14 @@ export const Comment = ({
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        borderBottom: "1px solid grey",
-        pb: 1,
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 1,
-        }}
-      >
+    <Box sx={styles.commentBox}>
+      <Box sx={styles.avatarBox}>
         <Avatar
           alt={author.name}
           src={author.profilePicture ? author.profilePicture : undefined}
         />
         <Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
+          <Box sx={styles.authorBox}>
             <Typography variant="caption">{author.name}</Typography>
             <Typography variant="caption">{formatedTime}</Typography>
           </Box>
@@ -82,13 +60,7 @@ export const Comment = ({
         </Box>
       </Box>
       {author.id === user.id ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <Box sx={styles.actionsBox}>
           <IconButton onClick={editComment} size="small">
             <EditIcon fontSize="small" />
           </IconButton>

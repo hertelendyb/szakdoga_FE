@@ -12,13 +12,13 @@ import {
   Button,
 } from "@mui/material";
 
-type EditCommentDialogProps = {
+interface EditCommentDialogProps {
   open: boolean;
   setOpen: (value: boolean) => void;
   oldComment: string;
   commentId: number;
   getTask: () => void;
-};
+}
 
 export const EditCommentDialog = ({
   open,

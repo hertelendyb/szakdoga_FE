@@ -9,6 +9,8 @@ import { Dropzone } from "../Dropzone/Dropzone";
 
 import { Box, TextField, Button } from "@mui/material";
 
+import { styles } from "./styles";
+
 const validationSchema = yup.object({
   email: yup
     .string()
@@ -56,27 +58,9 @@ export const SignUp = () => {
   });
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "darkblue",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
+    <Box sx={styles.signUpBox}>
       <form onSubmit={formik.handleSubmit}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "white",
-            borderRadius: 3,
-            p: 3,
-            gap: 2,
-          }}
-        >
+        <Box sx={styles.signUpForm}>
           <TextField
             label="Email"
             id="email"

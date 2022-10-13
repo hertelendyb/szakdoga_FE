@@ -15,6 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "react-toastify";
+import { styles } from "./styles";
 
 interface SectionMarkerProps {
   id: number;
@@ -52,31 +53,13 @@ export const SectionMarker = ({
   };
 
   return (
-    <Card
-      ref={setNodeRef}
-      style={style}
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        my: 2,
-      }}
-    >
+    <Card ref={setNodeRef} style={style} sx={styles.card}>
       <CardActions>
         <IconButton {...attributes} {...listeners} sx={{ cursor: "grab" }}>
           <DragHandle />
         </IconButton>
       </CardActions>
-      <CardContent
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          width: "100%",
-          justifyContent: "flex-start",
-        }}
-      >
+      <CardContent sx={styles.cardContent}>
         <Typography variant="h6">{name}</Typography>
       </CardContent>
       <CardActions>

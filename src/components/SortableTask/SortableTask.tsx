@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DragHandle } from "@mui/icons-material";
+import { styles } from "./styles";
 
 interface SortableTaskProps {
   id: number;
@@ -42,31 +43,13 @@ export const SortableTask = ({
   };
 
   return (
-    <Card
-      ref={setNodeRef}
-      style={style}
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        my: 2,
-      }}
-    >
+    <Card ref={setNodeRef} style={style} sx={styles.card}>
       <CardActions>
         <IconButton {...attributes} {...listeners} sx={{ cursor: "grab" }}>
           <DragHandle />
         </IconButton>
       </CardActions>
-      <CardContent
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          width: "100%",
-          justifyContent: "space-around",
-        }}
-      >
+      <CardContent sx={styles.cardContent}>
         <Grid container>
           <Grid item xs={3}>
             <Link

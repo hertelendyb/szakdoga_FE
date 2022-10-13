@@ -6,6 +6,7 @@ import { clearUser, selectUser } from "../../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import { Avatar, Box, Button, Typography } from "@mui/material";
+import { styles } from "./styles";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -20,31 +21,13 @@ export const Header = () => {
   const { user } = useAppSelector(selectUser);
 
   return (
-    <Box
-      sx={{
-        position: "sticky",
-        top: 0,
-        zIndex: 999,
-        backgroundColor: "darkcyan",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <Box sx={styles.header}>
       <Box sx={{ pl: 2 }}>
         <Link to="/home">
           <Typography variant="h5">Task manager</Typography>
         </Link>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
+      <Box sx={styles.userBox}>
         <Avatar
           alt={user.name}
           src={user.profilePicture ? user.profilePicture : undefined}
