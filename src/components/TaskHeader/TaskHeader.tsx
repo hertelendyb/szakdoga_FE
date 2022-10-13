@@ -1,17 +1,10 @@
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
+import { styles } from "./styles";
 
 export const TaskHeader = () => {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        my: 2,
-      }}
-    >
+    <Box sx={styles.taskHeader}>
       <Grid sx={{ ml: 9 }} container>
         <Grid item xs={3}>
           <Typography sx={{ fontSize: "large" }}>Name</Typography>

@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 
 import { Box, Button, TextField } from "@mui/material";
 
+import { styles } from "./styles";
+
 export const loginLoader = async () => {
   try {
     const res = await axios.get("/api/users/me");
@@ -36,27 +38,8 @@ export const Login = () => {
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "darkblue",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100%",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "white",
-          width: "25%",
-          height: "min-content",
-          borderRadius: 3,
-          p: 3,
-          gap: 2,
-        }}
-      >
+    <Box sx={styles.outerBox}>
+      <Box sx={styles.innerBox}>
         <TextField
           label="Email"
           value={email}

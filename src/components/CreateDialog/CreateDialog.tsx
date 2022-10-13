@@ -12,12 +12,12 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-type CreateDialogProps = {
+interface CreateDialogProps {
   open: boolean;
   setOpen: (value: boolean) => void;
   isForProject?: boolean;
   orgId?: string;
-};
+}
 
 export const CreateDialog = ({
   open,

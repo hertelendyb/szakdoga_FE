@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 
-type ConfirmDeleteDialogProps = {
+interface ConfirmDeleteDialogProps {
   open: boolean;
   setOpen: (value: boolean) => void;
   deleteProject?: boolean;
@@ -22,7 +22,7 @@ type ConfirmDeleteDialogProps = {
   projectId?: string;
   taskId?: string;
   commentId?: number;
-};
+}
 
 export const ConfirmDeleteDialog = ({
   open,

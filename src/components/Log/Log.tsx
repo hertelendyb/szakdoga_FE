@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { formatDate } from "../../utils/formatDate";
 
 import { Box, Typography } from "@mui/material";
+import { styles } from "./styles";
 
 type LogProps = {
   text: string;
@@ -18,12 +19,7 @@ export const Log = ({ text, timestamp }: LogProps) => {
   }, [timestamp]);
 
   return (
-    <Box
-      sx={{
-        borderBottom: "1px solid grey",
-        p: 1,
-      }}
-    >
+    <Box sx={styles.log}>
       <Typography variant="caption">{formatedTime}</Typography>
       <Typography variant="body1">{text}</Typography>
     </Box>
