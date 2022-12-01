@@ -39,7 +39,9 @@ export const Organization = () => {
   useEffect(() => {
     const getOrganization = async () => {
       try {
-        const res = await axios.get(`/api/organizations/${id}`);
+        const res = await axios.get(
+          `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}`
+        );
         setProjects(res.data.projects);
       } catch (error: any) {
         toast.error(error.response.data.message);

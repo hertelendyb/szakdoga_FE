@@ -33,7 +33,9 @@ export const MoveTaskDialog = ({ open, setOpen }: MoveTaskDialogProps) => {
   useEffect(() => {
     const getOrganization = async () => {
       try {
-        const res = await axios.get(`/api/organizations/${id}`);
+        const res = await axios.get(
+          `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}`
+        );
         setProjects(res.data.projects);
       } catch (error: any) {
         toast.error(error.response.data.message);
@@ -57,7 +59,7 @@ export const MoveTaskDialog = ({ open, setOpen }: MoveTaskDialogProps) => {
   const handleMoveTask = async () => {
     await axios({
       method: "patch",
-      url: `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/move`,
+      url: `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/move`,
       data: {
         projectId: newProject?.id,
       },

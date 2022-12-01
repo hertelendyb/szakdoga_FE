@@ -79,7 +79,7 @@ export const CreateTaskDialog = ({
         edit
           ? await axios({
               method: "patch",
-              url: `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`,
+              url: `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`,
               data: {
                 name: values.name,
                 description: values.description,
@@ -90,7 +90,7 @@ export const CreateTaskDialog = ({
             })
           : await axios({
               method: "post",
-              url: `/api/organizations/${id}/projects/${projectId}/tasks${
+              url: `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks${
                 taskId ? `/${taskId}` : ""
               }`,
               data: {
@@ -112,7 +112,7 @@ export const CreateTaskDialog = ({
   useEffect(() => {
     const getContributors = async () => {
       const res = await axios.get(
-        `/api/organizations/${id}/projects/${projectId}/contributors`
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/contributors`
       );
       setContributors(res.data);
     };

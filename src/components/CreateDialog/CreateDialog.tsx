@@ -35,7 +35,7 @@ export const CreateDialog = ({
   const handleCreateOrg = async () => {
     await axios({
       method: "post",
-      url: "/api/organizations/create",
+      url: "https://lilh91-task-manager-be.herokuapp.com/api/organizations/create",
       data: {
         name,
       },
@@ -47,7 +47,7 @@ export const CreateDialog = ({
   const handleCreateProject = async () => {
     await axios({
       method: "post",
-      url: `/api/organizations/${orgId}/projects/create`,
+      url: `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${orgId}/projects/create`,
       data: {
         name,
       },

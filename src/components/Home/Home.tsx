@@ -25,11 +25,15 @@ export const Home = () => {
   const [open, setOpen] = useState(false);
 
   const getOrgsAndProjects = async () => {
-    const orgResponse: any = await axios.get("/api/organizations");
+    const orgResponse: any = await axios.get(
+      "https://lilh91-task-manager-be.herokuapp.com/api/organizations"
+    );
     if (orgResponse.data instanceof Array) {
       setOrganizations(orgResponse.data);
     }
-    const projectResponse: any = await axios.get("/api/users/myProjects");
+    const projectResponse: any = await axios.get(
+      "https://lilh91-task-manager-be.herokuapp.com/api/users/myProjects"
+    );
     if (projectResponse.data instanceof Array) {
       setProjects(projectResponse.data);
     }
@@ -37,7 +41,7 @@ export const Home = () => {
 
   useEffect(() => {
     getOrgsAndProjects();
-    axios.get("/api/users/me");
+    axios.get("https://lilh91-task-manager-be.herokuapp.com/api/users/me");
   }, []);
 
   const openDialog = () => {

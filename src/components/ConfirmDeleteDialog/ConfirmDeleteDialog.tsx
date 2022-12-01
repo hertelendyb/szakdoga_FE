@@ -44,7 +44,9 @@ export const ConfirmDeleteDialog = ({
   const handleDelete = async () => {
     if (deleteProject) {
       try {
-        await axios.delete(`/api/organizations/${orgId}/projects/${projectId}`);
+        await axios.delete(
+          `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${orgId}/projects/${projectId}`
+        );
         setOpen(false);
         navigate(`/organization/${orgId}`);
       } catch (error: any) {
@@ -53,7 +55,7 @@ export const ConfirmDeleteDialog = ({
     } else if (deleteTask) {
       try {
         await axios.delete(
-          `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}`
+          `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}`
         );
         setOpen(false);
         navigate(`/organization/${orgId}/project/${projectId}`);
@@ -63,7 +65,7 @@ export const ConfirmDeleteDialog = ({
     } else if (deleteComment) {
       try {
         await axios.delete(
-          `/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}/delete-comment/${commentId}`
+          `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${orgId}/projects/${projectId}/tasks/${taskId}/delete-comment/${commentId}`
         );
         setOpen(false);
         navigate(0);
@@ -72,7 +74,9 @@ export const ConfirmDeleteDialog = ({
       }
     } else {
       try {
-        await axios.delete(`/api/organizations/${orgId}`);
+        await axios.delete(
+          `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${orgId}`
+        );
         setOpen(false);
         navigate("/home");
       } catch (error: any) {

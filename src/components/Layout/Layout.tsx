@@ -10,7 +10,9 @@ import { Box } from "@mui/material";
 
 export const layoutLoader = async () => {
   try {
-    const res = await axios.get("/api/users/me");
+    const res = await axios.get(
+      "https://lilh91-task-manager-be.herokuapp.com/api/users/me"
+    );
     store.dispatch(setUser(res.data));
   } catch (err: any) {
     if (err.response.status === 401) {

@@ -39,7 +39,7 @@ export const AddUserDialog = ({
     try {
       await axios({
         method: "post",
-        url: `/api/organizations/${orgId}/projects/${projectId}/add-${
+        url: `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${orgId}/projects/${projectId}/add-${
           addPO ? "project-owner" : "contributor"
         }`,
         data: {
@@ -57,7 +57,7 @@ export const AddUserDialog = ({
     try {
       await axios({
         method: "post",
-        url: `/api/organizations/${orgId}/add-${
+        url: `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${orgId}/add-${
           addPO ? "project-owner" : "contributor"
         }`,
         data: {

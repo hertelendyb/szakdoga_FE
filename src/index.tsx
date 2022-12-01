@@ -47,7 +47,9 @@ const router = createBrowserRouter([
         path: "/organization/:id",
         element: <Organization />,
         loader: async ({ params }) => {
-          const res = await axios.get(`/api/organizations/${params.id}`);
+          const res = await axios.get(
+            `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${params.id}`
+          );
           return res.data.name;
         },
       },
@@ -56,7 +58,7 @@ const router = createBrowserRouter([
         element: <Project />,
         loader: async ({ params }) => {
           const project = await axios.get(
-            `/api/organizations/${params.id}/projects/${params.projectId}`
+            `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${params.id}/projects/${params.projectId}`
           );
           return [project.data.organization.name, project.data.name];
         },

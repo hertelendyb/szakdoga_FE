@@ -64,7 +64,7 @@ export const Project = () => {
   const getTasks = useCallback(async () => {
     try {
       const res = await axios.get(
-        `/api/organizations/${id}/projects/${projectId}/tasks`
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks`
       );
       const tasks: Task[] = sortBy(res.data, ["order"]);
       setTasks(tasks);
@@ -126,7 +126,7 @@ export const Project = () => {
         const newTaskArray = arrayMove(tasks, oldIndex, newIndex);
         newTaskArray.forEach((task, index) =>
           axios.patch(
-            `/api/organizations/${id}/projects/${projectId}/tasks/${task.id}`,
+            `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${task.id}`,
             {
               order: index + 1,
             }
@@ -140,7 +140,7 @@ export const Project = () => {
   const handleCheck = async (taskId: number, isDone: boolean) => {
     try {
       const res = await axios.patch(
-        `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`,
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`,
         {
           done: !isDone,
         }

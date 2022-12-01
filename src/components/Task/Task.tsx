@@ -81,7 +81,7 @@ export const Task = () => {
   const getTask = useCallback(async () => {
     try {
       const res = await axios.get(
-        `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`
       );
       setTask(res.data);
       setComments(orderBy(res.data.comments, ["createdAt"], ["desc"]));
@@ -94,7 +94,7 @@ export const Task = () => {
   const getLogs = useCallback(async () => {
     try {
       const res = await axios.get(
-        `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/logs`
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/logs`
       );
       const ordered = orderBy(res.data, ["timestamp"], ["desc"]);
       setLogs(ordered);
@@ -135,7 +135,7 @@ export const Task = () => {
   const handleCheck = async (taskId: number, isDone: boolean) => {
     try {
       const res = await axios.patch(
-        `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`,
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`,
         {
           done: !isDone,
         }
@@ -188,7 +188,7 @@ export const Task = () => {
         newTaskArray.forEach(
           async (task, index) =>
             await axios.patch(
-              `/api/organizations/${id}/projects/${projectId}/tasks/${task.id}`,
+              `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${task.id}`,
               {
                 order: index + 1,
               }
@@ -203,7 +203,7 @@ export const Task = () => {
   const addComment = async () => {
     try {
       await axios.post(
-        `/api/organizations/${id}/projects/${projectId}/tasks/${task.id}/add-comment`,
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${task.id}/add-comment`,
         {
           text: newComment,
         }
