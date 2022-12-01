@@ -15,6 +15,7 @@ import {
   Home,
   Layout,
   Login,
+  NotFound,
   Organization,
   Project,
   SignUp,
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     loader: layoutLoader,
+    errorElement: <NotFound type="Page" />,
     children: [
       {
         path: "/home",
@@ -50,6 +52,7 @@ const router = createBrowserRouter([
           const res = await axios.get(`/api/organizations/${params.id}`);
           return res.data.name;
         },
+        errorElement: <NotFound type="Organization" />,
       },
       {
         path: "/organization/:id/project/:projectId",
@@ -60,10 +63,18 @@ const router = createBrowserRouter([
           );
           return [project.data.organization.name, project.data.name];
         },
+        errorElement: <NotFound type="Project" />,
       },
       {
         path: "/organization/:id/project/:projectId/task/:taskId",
         element: <Task />,
+        loader: async ({ params }) => {
+          const task = await axios.get(
+            `/api/organizations/${params.id}/projects/${params.projectId}/tasks/${params.taskId}`
+          );
+          return task;
+        },
+        errorElement: <NotFound type="Task" />,
       },
     ],
   },

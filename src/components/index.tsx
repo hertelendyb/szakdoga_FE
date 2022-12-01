@@ -6,3 +6,4 @@ export { Layout } from "./Layout/Layout";
 export { Organization } from "./Organization/Organization";
 export { Project } from "./Project/Project";
 export { Task } from "./Task/Task";
+export { NotFound } from "./NotFound/NotFound";

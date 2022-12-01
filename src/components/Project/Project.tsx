@@ -31,6 +31,7 @@ import {
   Breadcrumbs,
   Link as MUILink,
 } from "@mui/material";
+import { ContributorsDialog } from "../ContributorsDialog/ContributorsDialog";
 
 export interface Task {
   id: number;
@@ -44,6 +45,7 @@ export interface Task {
     name: string;
   };
   childTasks: Task[];
+  parentTask: Partial<Task>;
   comments: TaskComment[];
 }
 
@@ -55,8 +57,9 @@ export const Project = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [orgContributor, setOrgContributor] = useState(false);
-  const [projectContributor, setProjectContributor] = useState(false);
+  const [contributorsOpen, setContributorsOpen] = useState(false);
+  const [orgContributor, setOrgContributor] = useState(true);
+  const [projectContributor, setProjectContributor] = useState(true);
   const [sectionMarker, setSectionMarker] = useState(false);
 
   const { orgPermissions, projectPermissions } = useAppSelector(selectUser);
@@ -99,7 +102,7 @@ export const Project = () => {
     }
 
     getTasks();
-  }, [getTasks, id, orgPermissions, projectId, projectPermissions]);
+  }, [getTasks, id, projectId]);
 
   const openCreateDialog = () => {
     setSectionMarker(false);
@@ -163,6 +166,10 @@ export const Project = () => {
   const openAddProjectOwnerDialog = () => {
     setIsPO(true);
     setAddOpen(true);
+  };
+
+  const openContributorsDialog = () => {
+    setContributorsOpen(true);
   };
 
   return (
@@ -245,6 +252,13 @@ export const Project = () => {
             >
               Add PO to this project
             </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={openContributorsDialog}
+            >
+              Show project members
+            </Button>
           </>
         ) : null}
       </Box>
@@ -269,6 +283,11 @@ export const Project = () => {
         projectId={projectId}
         addPO={isPO}
         addToProject
+      />
+      <ContributorsDialog
+        open={contributorsOpen}
+        setOpen={setContributorsOpen}
+        isForProject
       />
     </Box>
   );

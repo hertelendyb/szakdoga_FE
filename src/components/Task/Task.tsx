@@ -59,8 +59,8 @@ export const Task = () => {
   const [comments, setComments] = useState<TaskComment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [edit, setEdit] = useState(false);
-  const [orgContributor, setOrgContributor] = useState(false);
-  const [projectContributor, setProjectContributor] = useState(false);
+  const [orgContributor, setOrgContributor] = useState(true);
+  const [projectContributor, setProjectContributor] = useState(true);
   const [sectionMarker, setSectionMarker] = useState(false);
   const [subtasks, setSubtasks] = useState<TaskType[]>([]);
   const [task, setTask] = useState<TaskType>({
@@ -73,12 +73,14 @@ export const Task = () => {
     assignee: { id: 0, name: "" },
     childTasks: [],
     comments: [],
+    parentTask: { id: 0, name: "" },
   });
   const { id, projectId, taskId } = useParams();
 
   const { orgPermissions, projectPermissions } = useAppSelector(selectUser);
 
   const getTask = useCallback(async () => {
+    console.log("first");
     try {
       const res = await axios.get(
         `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`
@@ -130,7 +132,7 @@ export const Task = () => {
 
     getTask();
     getLogs();
-  }, [getLogs, getTask, id, orgPermissions, projectId, projectPermissions]);
+  }, [getLogs, getTask, id, projectId]);
 
   const handleCheck = async (taskId: number, isDone: boolean) => {
     try {
@@ -224,6 +226,18 @@ export const Task = () => {
         <Typography variant="h5">{task?.name}</Typography>
         <Typography variant="h6">Description</Typography>
         <Typography variant="body1">{task?.description}</Typography>
+        {task?.parentTask ? (
+          <>
+            <Typography variant="h6">Parent Task</Typography>
+            <Typography
+              component={Link}
+              to={`/organization/${id}/project/${projectId}/task/${task.parentTask.id}`}
+              variant="body1"
+            >
+              {task?.parentTask.name}
+            </Typography>
+          </>
+        ) : null}
         <Typography variant="h6">Deadline</Typography>
         <Typography variant="body1">
           {task?.deadline ? task?.deadline : "-"}
@@ -384,7 +398,9 @@ export const Task = () => {
         getTask={getTask}
         sectionMarker={sectionMarker}
       />
-      <MoveTaskDialog open={moveOpen} setOpen={setMoveOpen} />
+      {orgContributor || projectContributor ? null : (
+        <MoveTaskDialog open={moveOpen} setOpen={setMoveOpen} />
+      )}
     </Grid>
   );
 };

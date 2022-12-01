@@ -33,12 +33,13 @@ interface CreateTaskDialogProps {
   sectionMarker?: boolean;
 }
 
-interface Contributor {
+export interface Contributor {
   id: number;
   projectId: number;
   roleId: number;
   user: {
     name: string;
+    id: number;
   };
   userId: number;
 }
@@ -57,9 +58,15 @@ export const CreateTaskDialog = ({
   const { id, projectId, taskId } = useParams();
 
   const validationSchema = yup.object({
-    name: yup.string().required("Name is required"),
+    name: yup
+      .string()
+      .required("Name is required")
+      .max(50, "Max 50 characters"),
     description: !sectionMarker
-      ? yup.string().required("Description is required")
+      ? yup
+          .string()
+          .required("Description is required")
+          .max(254, "Max 254 characters")
       : yup.string(),
     deadline: yup.date().nullable(),
     assigneeId: yup.number(),
@@ -73,6 +80,7 @@ export const CreateTaskDialog = ({
       assigneeId: edit ? task?.assignee?.id : 0,
     },
     enableReinitialize: true,
+
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
@@ -101,6 +109,7 @@ export const CreateTaskDialog = ({
                 order: length + 1,
               },
             });
+        formik.resetForm();
         setOpen(false);
         !task ? getTasks() : getTask();
       } catch (e: any) {
@@ -121,6 +130,7 @@ export const CreateTaskDialog = ({
   }, [id, projectId, open]);
 
   const handleClose = () => {
+    formik.resetForm();
     setOpen(false);
   };
 

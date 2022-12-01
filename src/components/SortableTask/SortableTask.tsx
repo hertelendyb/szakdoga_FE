@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -36,11 +36,17 @@ export const SortableTask = ({
     useSortable({ id: taskId });
 
   const { id, projectId } = useParams();
+  const [subtasks, setSubtasks] = useState<Task[]>([]);
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  useEffect(() => {
+    const filtered = task.childTasks.filter((task) => task.description);
+    setSubtasks(filtered);
+  }, [task.childTasks]);
 
   return (
     <Card ref={setNodeRef} style={style} sx={styles.card}>
@@ -50,7 +56,7 @@ export const SortableTask = ({
         </IconButton>
       </CardActions>
       <CardContent sx={styles.cardContent}>
-        <Grid container>
+        <Grid container sx={{ alignItems: "center" }}>
           <Grid item xs={3}>
             <Link
               to={`/organization/${id}/project/${projectId}/task/${taskId}`}
@@ -71,7 +77,7 @@ export const SortableTask = ({
           <Grid item xs={3}>
             <Typography>
               {task.childTasks?.length
-                ? `${task.childTasks.length} subtask(s)`
+                ? `${subtasks.length} subtask(s)`
                 : "No subtasks"}
             </Typography>
           </Grid>

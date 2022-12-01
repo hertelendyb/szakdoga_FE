@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ import {
   Typography,
   Link as MUILink,
 } from "@mui/material";
+import { ContributorsDialog } from "../ContributorsDialog/ContributorsDialog";
 
 export interface Project {
   id: number;
@@ -29,6 +30,7 @@ export const Organization = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [contributorsOpen, setContributorsOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [isPO, setIsPO] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
@@ -36,16 +38,16 @@ export const Organization = () => {
 
   const { orgPermissions } = useAppSelector(selectUser);
 
-  useEffect(() => {
-    const getOrganization = async () => {
-      try {
-        const res = await axios.get(`/api/organizations/${id}`);
-        setProjects(res.data.projects);
-      } catch (error: any) {
-        toast.error(error.response.data.message);
-      }
-    };
+  const getOrganization = useCallback(async () => {
+    try {
+      const res = await axios.get(`/api/organizations/${id}`);
+      setProjects(res.data.projects);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    }
+  }, [id]);
 
+  useEffect(() => {
     const havePermission = orgPermissions.filter(
       (permission) =>
         permission.roleId === 1 &&
@@ -58,7 +60,7 @@ export const Organization = () => {
     }
 
     getOrganization();
-  }, [id, orgPermissions]);
+  }, [getOrganization, id]);
 
   const openCreateDialog = () => {
     setCreateOpen(true);
@@ -76,6 +78,10 @@ export const Organization = () => {
   const openAddProjectOwnerDialog = () => {
     setIsPO(true);
     setAddOpen(true);
+  };
+
+  const openContributorsDialog = () => {
+    setContributorsOpen(true);
   };
 
   return (
@@ -124,6 +130,13 @@ export const Organization = () => {
           >
             Add PO to this organization
           </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={openContributorsDialog}
+          >
+            Show organization members
+          </Button>
         </Box>
       ) : null}
       <CreateDialog
@@ -131,6 +144,7 @@ export const Organization = () => {
         setOpen={setCreateOpen}
         isForProject
         orgId={id}
+        getProject={getOrganization}
       />
       <ConfirmDeleteDialog
         open={deleteOpen}
@@ -142,6 +156,10 @@ export const Organization = () => {
         setOpen={setAddOpen}
         orgId={id}
         addPO={isPO}
+      />
+      <ContributorsDialog
+        open={contributorsOpen}
+        setOpen={setContributorsOpen}
       />
     </Box>
   );

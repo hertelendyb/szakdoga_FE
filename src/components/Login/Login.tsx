@@ -3,7 +3,7 @@ import { Link, redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 import { styles } from "./styles";
 
@@ -40,6 +40,9 @@ export const Login = () => {
   return (
     <Box sx={styles.outerBox}>
       <Box sx={styles.innerBox}>
+        <Typography align="center" variant="h3">
+          Task Manager
+        </Typography>
         <TextField
           label="Email"
           value={email}

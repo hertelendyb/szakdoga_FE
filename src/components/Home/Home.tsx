@@ -48,7 +48,7 @@ export const Home = () => {
     <Box>
       <Typography sx={{ mb: 3 }}>Organizations</Typography>
       {!organizations[0].id ? (
-        <Typography>No projects found</Typography>
+        <Typography>No organizations found</Typography>
       ) : (
         <Grid container spacing={5}>
           {organizations.map((organization) => (
@@ -79,7 +79,7 @@ export const Home = () => {
       <Button sx={{ mt: 3 }} variant="contained" onClick={openDialog}>
         Create new organization
       </Button>
-      <CreateDialog open={open} setOpen={setOpen} />
+      <CreateDialog open={open} setOpen={setOpen} getOrg={getOrgsAndProjects} />
     </Box>
   );
 };

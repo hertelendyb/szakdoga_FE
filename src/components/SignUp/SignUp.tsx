@@ -15,9 +15,16 @@ const validationSchema = yup.object({
   email: yup
     .string()
     .email("Enter a valid email")
+    .max(100, "Max 100 characters")
     .required("Email is required"),
-  password: yup.string().required("Password is required"),
-  username: yup.string().required("Name is required"),
+  password: yup
+    .string()
+    .max(100, "Max 100 characters")
+    .required("Password is required"),
+  username: yup
+    .string()
+    .max(100, "Max 100 characters")
+    .required("Name is required"),
 });
 
 export const SignUp = () => {
