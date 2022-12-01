@@ -2,7 +2,6 @@
   "name": "szakdoga_fe",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://lilh91-task-manager-be.herokuapp.com/",
   "dependencies": {
     "@dnd-kit/core": "^6.0.5",
     "@dnd-kit/modifiers": "^6.0.0",

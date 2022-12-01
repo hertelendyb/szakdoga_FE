@@ -9,7 +9,9 @@ import { styles } from "./styles";
 
 export const loginLoader = async () => {
   try {
-    const res = await axios.get("/api/users/me");
+    const res = await axios.get(
+      "https://lilh91-task-manager-be.herokuapp.com/api/users/me"
+    );
     if (res.status === 200) {
       return redirect("/home");
     }
@@ -25,7 +27,7 @@ export const Login = () => {
     try {
       await axios({
         method: "post",
-        url: "/api/users/login",
+        url: "https://lilh91-task-manager-be.herokuapp.com/api/users/login",
         data: {
           email,
           password,

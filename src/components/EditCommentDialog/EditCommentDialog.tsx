@@ -40,7 +40,7 @@ export const EditCommentDialog = ({
     try {
       await axios({
         method: "patch",
-        url: `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/edit-comment/${commentId}`,
+        url: `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}/edit-comment/${commentId}`,
         data: {
           text: comment,
         },

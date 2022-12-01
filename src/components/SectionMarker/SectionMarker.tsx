@@ -43,7 +43,7 @@ export const SectionMarker = ({
   const handleDeleteSectionMarker = async () => {
     try {
       await axios.delete(
-        `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`
+        `https://lilh91-task-manager-be.herokuapp.com/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`
       );
       getTask();
       getTasks();

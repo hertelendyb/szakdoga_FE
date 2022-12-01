@@ -34,7 +34,7 @@ export const SignUp = () => {
       try {
         await axios({
           method: "post",
-          url: "/api/users/signup",
+          url: "https://lilh91-task-manager-be.herokuapp.com/api/users/signup",
           data: {
             email: values.email,
             password: values.password,
@@ -44,7 +44,7 @@ export const SignUp = () => {
         });
         await axios({
           method: "post",
-          url: "/api/users/login",
+          url: "https://lilh91-task-manager-be.herokuapp.com/api/users/login",
           data: {
             email: values.email,
             password: values.password,

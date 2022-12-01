@@ -13,7 +13,9 @@ export const Header = () => {
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    await axios.get("/api/users/logout");
+    await axios.get(
+      "https://lilh91-task-manager-be.herokuapp.com/api/users/logout"
+    );
     dispatch(clearUser());
     navigate("/login");
   };
