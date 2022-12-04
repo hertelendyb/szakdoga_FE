@@ -69,8 +69,8 @@ export const Project = () => {
       const res = await axios.get(
         `/api/organizations/${id}/projects/${projectId}/tasks`
       );
-      const tasks: Task[] = sortBy(res.data, ["order"]);
-      setTasks(tasks);
+      const tasksh: Task[] = sortBy(res.data, ["order"]);
+      setTasks(tasksh);
     } catch (error: any) {
       toast.error(error.response.data.message);
     }

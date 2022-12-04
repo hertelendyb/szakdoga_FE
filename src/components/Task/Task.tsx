@@ -80,7 +80,6 @@ export const Task = () => {
   const { orgPermissions, projectPermissions } = useAppSelector(selectUser);
 
   const getTask = useCallback(async () => {
-    console.log("first");
     try {
       const res = await axios.get(
         `/api/organizations/${id}/projects/${projectId}/tasks/${taskId}`
@@ -147,6 +146,7 @@ export const Task = () => {
         prevtask.childTasks[taskIndex] = { ...res.data };
         return { ...prevtask };
       });
+      getTask();
     } catch (error: any) {
       toast.error(error.response.data.message);
     }
